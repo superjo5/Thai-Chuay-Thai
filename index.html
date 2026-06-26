@@ -11,122 +11,103 @@
 <link rel="manifest" href="manifest.json">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{min-height:100%;background:#f4f6f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-  body{display:flex;flex-direction:column;align-items:center;padding:0 0 40px}
-  .topbar{width:100%;background:#1D9E75;padding:16px 20px 14px;color:#fff}
-  .topbar h1{font-size:18px;font-weight:600}
-  .topbar p{font-size:12px;opacity:.82;margin-top:2px}
-  .wrap{width:100%;max-width:480px;padding:16px 16px 0}
-  .card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px}
-  .card-label{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
-  .input-row{display:flex;align-items:center;gap:10px}
-  .baht{font-size:28px;font-weight:600;color:#aaa}
-  input[type=text]{flex:1;font-size:36px;font-weight:700;color:#222;background:#f7f7f7;border:2px solid #e8e8e8;border-radius:14px;padding:12px 16px;outline:none;width:100%}
+  html,body{height:100%;background:#f4f6f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  body{display:flex;flex-direction:column;align-items:center}
+  .app{width:100%;max-width:480px;height:100%;padding:12px;display:flex;flex-direction:column;gap:10px}
+  .topbar{background:#1D9E75;border-radius:14px;padding:11px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+  .topbar h1{font-size:16px;font-weight:600}
+  .topbar .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px}
+  .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex-shrink:0}
+  .card{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+  .lbl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+  .inp-row{display:flex;align-items:center;gap:6px}
+  .baht{font-size:22px;font-weight:600;color:#bbb}
+  input[type=text]{flex:1;font-size:28px;font-weight:700;color:#222;background:#f7f7f7;border:2px solid #eee;border-radius:10px;padding:8px 12px;outline:none;width:100%}
   input[type=text]:focus{border-color:#1D9E75;background:#f0fbf7}
-  .input-hint{font-size:12px;color:#aaa;margin-top:8px}
-  .budget-bar-wrap{margin-top:12px}
-  .budget-bar-labels{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-bottom:5px}
-  .budget-bar-bg{height:10px;border-radius:5px;background:#eee;overflow:hidden}
-  .budget-bar-fill{height:100%;border-radius:5px;background:#1D9E75;transition:width .2s}
-  .budget-bar-fill.low{background:#E07B00}
-  .budget-bar-fill.empty{background:#E24B4A}
-  .budget-bar-labels2{display:flex;justify-content:space-between;font-size:11px;color:#ccc;margin-top:4px}
-  .split-bar{height:16px;border-radius:8px;background:#eee;display:flex;overflow:hidden;margin:14px 0 6px}
+  .bbar-bg{height:6px;border-radius:3px;background:#eee;overflow:hidden;margin:9px 0 4px}
+  .bbar-fill{height:100%;border-radius:3px;background:#1D9E75;transition:width .2s}
+  .bbar-fill.low{background:#E07B00}
+  .bbar-fill.empty{background:#E24B4A}
+  .blabels{display:flex;justify-content:space-between;font-size:10px;color:#aaa}
+  .max-hint{font-size:11px;color:#888;margin-top:6px;line-height:1.4}
+  .max-hint strong{color:#222;font-weight:600}
+  .split-bar{height:10px;border-radius:5px;background:#eee;display:flex;overflow:hidden;margin:8px 0 5px}
   .bar-g{background:#1D9E75;transition:width .2s;min-width:0}
   .bar-b{background:#378ADD;transition:width .2s;flex:1}
-  .bar-labels{display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:14px}
-  .bar-labels span{display:flex;align-items:center;gap:4px}
-  .dot{width:8px;height:8px;border-radius:50%}
-  .result-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
-  .result-row:last-child{border-bottom:none;padding-bottom:0}
-  .result-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-  .ri-g{background:#e8f5f1}
-  .ri-b{background:#e6f1fb}
-  .result-info{flex:1;margin:0 10px}
-  .result-info .rt{font-size:14px;color:#333;font-weight:500}
-  .result-info .rs{font-size:12px;color:#999;margin-top:1px}
-  .result-val{font-size:22px;font-weight:700}
-  .rv-g{color:#1D9E75}
-  .rv-b{color:#378ADD}
-  .alert{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;margin-top:12px}
+  .legend{display:flex;gap:10px;font-size:11px;color:#888;margin-bottom:8px}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
+  .res2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .rc{background:#f7f7f7;border-radius:10px;padding:9px 11px}
+  .rc .rl{font-size:11px;color:#999;margin-bottom:3px}
+  .rc .rv{font-size:22px;font-weight:700}
+  .rv.green{color:#1D9E75}
+  .rv.blue{color:#378ADD}
+  .alert{border-radius:9px;padding:8px 11px;font-size:12px;line-height:1.45;margin-top:8px}
   .alert.warn{background:#FFF8E1;color:#9A6500}
   .alert.ok{background:#E8F5E9;color:#2E7D32}
-  .info-card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px}
-  .info-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid #f5f5f5}
-  .info-row:last-child{border-bottom:none;padding-bottom:0}
-  .info-emoji{font-size:18px;flex-shrink:0;width:26px;text-align:center}
-  .info-text .it{font-size:13px;color:#333;font-weight:500}
-  .info-text .is{font-size:12px;color:#999;margin-top:1px}
+  .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .info-item{background:#f7f7f7;border-radius:10px;padding:8px 10px;font-size:11px;color:#888;line-height:1.4}
+  .info-item strong{color:#333;display:block;font-weight:600;font-size:12px;margin-bottom:1px}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <h1>ไทยช่วยไทย พลัส 💚</h1>
-  <p>คำนวณสิทธิ์ 60/40 · มิ.ย. – ก.ย. 2569</p>
-</div>
-<div class="wrap">
+<div class="app">
+  <div class="topbar">
+    <h1>ไทยช่วยไทย พลัส 💚</h1>
+    <span class="badge">60 / 40</span>
+  </div>
 
-  <div class="card">
-    <div class="card-label">ราคาสินค้า</div>
-    <div class="input-row">
-      <span class="baht">฿</span>
-      <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
+  <div class="row2">
+    <div class="card">
+      <div class="lbl">วงเงินรัฐเหลือวันนี้</div>
+      <div class="inp-row">
+        <span class="baht">฿</span>
+        <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc()">
+      </div>
+      <div id="bbar-wrap" style="display:none">
+        <div class="bbar-bg"><div class="bbar-fill" id="bbar" style="width:100%"></div></div>
+        <div class="blabels"><span id="bleft">—</span><span>/ 200 ฿</span></div>
+        <div class="max-hint" id="max-hint"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">ราคาสินค้า</div>
+      <div class="inp-row">
+        <span class="baht">฿</span>
+        <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-label">วงเงินรัฐคงเหลือวันนี้</div>
-    <div class="input-row">
-      <span class="baht">฿</span>
-      <input type="text" id="budget" inputmode="decimal" placeholder="200.00" oninput="calc()">
-    </div>
-    <p class="input-hint">วงเงินรายวันสูงสุด 200 ฿ — ใส่เท่าที่เหลืออยู่ตอนนี้</p>
-    <div class="budget-bar-wrap" id="budget-bar-wrap" style="display:none">
-      <div class="budget-bar-labels"><span>วงเงินคงเหลือ</span><span id="budget-pct">—</span></div>
-      <div class="budget-bar-bg"><div class="budget-bar-fill" id="bbar" style="width:100%"></div></div>
-      <div class="budget-bar-labels2"><span>0 ฿</span><span>200 ฿</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">ผลการคำนวณ</div>
+  <div class="card" style="flex:1;min-height:0">
+    <div class="lbl">ผลการคำนวณ</div>
     <div class="split-bar">
       <div class="bar-g" id="bg" style="width:0%"></div>
       <div class="bar-b" id="bb" style="width:100%"></div>
     </div>
-    <div class="bar-labels">
+    <div class="legend">
       <span><span class="dot" style="background:#1D9E75"></span>รัฐออก</span>
       <span><span class="dot" style="background:#378ADD"></span>คุณออก</span>
     </div>
-    <div class="result-row">
-      <div class="result-icon ri-g">🏛</div>
-      <div class="result-info">
-        <div class="rt">รัฐออกให้จริง</div>
-        <div class="rs">60% ของราคา (ไม่เกิน 200 ฿ และวงเงินคงเหลือ)</div>
-      </div>
-      <div class="result-val rv-g" id="gov">— ฿</div>
+    <div class="res2">
+      <div class="rc"><div class="rl">รัฐออกให้จริง</div><div class="rv green" id="gov">—</div></div>
+      <div class="rc"><div class="rl">คุณต้องจ่าย</div><div class="rv blue" id="you">—</div></div>
     </div>
-    <div class="result-row">
-      <div class="result-icon ri-b">👤</div>
-      <div class="result-info">
-        <div class="rt">คุณต้องจ่าย</div>
-        <div class="rs">ส่วนที่เหลือ</div>
-      </div>
-      <div class="result-val rv-b" id="you">— ฿</div>
-    </div>
-    <div id="alert-box"></div>
+    <div id="alert"></div>
   </div>
 
-  <div class="info-card">
-    <div class="card-label" style="margin-bottom:10px">ข้อมูลโครงการ</div>
-    <div class="info-row"><div class="info-emoji">📅</div><div class="info-text"><div class="it">1 มิ.ย. – 30 ก.ย. 2569 (4 เดือน)</div></div></div>
-    <div class="info-row"><div class="info-emoji">💰</div><div class="info-text"><div class="it">วงเงินสูงสุด 1,000 ฿/เดือน</div><div class="is">โอนทุกวันที่ 1 ของเดือน · รวม 4,000 ฿</div></div></div>
-    <div class="info-row"><div class="info-emoji">⏰</div><div class="info-text"><div class="it">ใช้สิทธิ์ได้ 06:00 – 23:00 น.</div></div></div>
-    <div class="info-row"><div class="info-emoji">⚠️</div><div class="info-text"><div class="it">วงเงินไม่สะสมข้ามเดือน</div><div class="is">ใช้ไม่หมดหมดสิทธิ์ทันที</div></div></div>
-    <div class="info-row"><div class="info-emoji">📱</div><div class="info-text"><div class="it">แอป เป๋าตัง (G-Wallet)</div><div class="is">โทร. 0-2111-1122 (24 ชม.)</div></div></div>
+  <div class="card" style="flex-shrink:0">
+    <div class="lbl">ข้อมูลโครงการ</div>
+    <div class="info-grid">
+      <div class="info-item"><strong>📅 ระยะเวลา</strong>1 มิ.ย. – 30 ก.ย. 2569</div>
+      <div class="info-item"><strong>💰 วงเงิน</strong>1,000 ฿/เดือน · รวม 4,000 ฿</div>
+      <div class="info-item"><strong>⏰ เวลาใช้สิทธิ์</strong>06:00 – 23:00 น.</div>
+      <div class="info-item"><strong>⚠️ หมายเหตุ</strong>วงเงินไม่สะสมข้ามเดือน</div>
+    </div>
   </div>
-
 </div>
+
 <script>
 function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' ฿'}
 function parseNum(s){var v=parseFloat(s.replace(/[^0-9.]/g,''));return isNaN(v)?0:v;}
@@ -136,21 +117,28 @@ function calc(){
   var hasBudget=bRaw!=='';
   var b=hasBudget?Math.min(parseNum(bRaw),200):200;
   if(hasBudget){
-    document.getElementById('budget-bar-wrap').style.display='block';
+    document.getElementById('bbar-wrap').style.display='block';
     var bPct=Math.min(100,Math.round((b/200)*100));
     var bar=document.getElementById('bbar');
     bar.style.width=bPct+'%';
-    bar.className='budget-bar-fill'+(b===0?' empty':b<=50?' low':'');
-    document.getElementById('budget-pct').textContent='เหลือ '+fmt(b);
+    bar.className='bbar-fill'+(b===0?' empty':b<=50?' low':'');
+    document.getElementById('bleft').textContent='เหลือ '+fmt(b);
+    if(b>0){
+      var maxP=parseFloat((b/0.6).toFixed(2));
+      var youMax=parseFloat((maxP-b).toFixed(2));
+      document.getElementById('max-hint').innerHTML='ซื้อได้สูงสุด <strong>'+fmt(maxP)+'</strong> (คุณออก '+fmt(youMax)+')';
+    } else {
+      document.getElementById('max-hint').innerHTML='วงเงินหมดแล้ว';
+    }
   } else {
-    document.getElementById('budget-bar-wrap').style.display='none';
+    document.getElementById('bbar-wrap').style.display='none';
   }
   if(!p){
     document.getElementById('bg').style.width='0%';
     document.getElementById('bb').style.width='100%';
-    document.getElementById('gov').textContent='— ฿';
-    document.getElementById('you').textContent='— ฿';
-    document.getElementById('alert-box').innerHTML='';
+    document.getElementById('gov').textContent='—';
+    document.getElementById('you').textContent='—';
+    document.getElementById('alert').innerHTML='';
     return;
   }
   var gIdeal=parseFloat(Math.min(p*0.6,200).toFixed(2));
@@ -163,15 +151,15 @@ function calc(){
   document.getElementById('bb').style.width=(100-gp)+'%';
   var msg='';
   if(b===0){
-    msg='<div class="alert warn">⚠️ วงเงินรัฐหมดแล้ววันนี้ — คุณต้องจ่ายทั้งหมด '+fmt(p)+'</div>';
+    msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';
   } else if(hasBudget&&gIdeal>b){
-    msg='<div class="alert warn">⚠️ วงเงินรัฐเหลือแค่ '+fmt(b)+' — คุณต้องออกเพิ่มเป็น '+fmt(y)+'</div>';
+    msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';
   } else if(p*0.6>200){
-    msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยได้สูงสุด '+fmt(g)+' คุณออกส่วนเกิน '+fmt(y)+'</div>';
+    msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';
   } else {
-    msg='<div class="alert ok">✅ ประหยัดได้ '+fmt(g)+' ('+gp+'%) คุณจ่ายจริงแค่ '+fmt(y)+'</div>';
+    msg='<div class="alert ok">✅ ประหยัดได้ '+fmt(g)+' ('+gp+'%) จ่ายจริงแค่ '+fmt(y)+'</div>';
   }
-  document.getElementById('alert-box').innerHTML=msg;
+  document.getElementById('alert').innerHTML=msg;
 }
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
