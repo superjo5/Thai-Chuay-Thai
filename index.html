@@ -53,9 +53,14 @@
   .rc-sub{font-size:11px;margin-top:3px}
   .rc-sub.green{color:#3C8C6A}
   .rc-sub.blue{color:#185FA5}
+  .remain-box{border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;background:#f7f7f7;border:1px solid #eee}
+  .remain-label{font-size:12px;color:#777}
+  .remain-val{font-size:clamp(18px,4vw,22px);font-weight:700}
+  .remain-val.ok{color:#0F6E56}
+  .remain-val.low{color:#E07B00}
+  .remain-val.empty{color:#E24B4A}
   .alert{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px}
   .alert.warn{background:#FFF8E1;color:#9A6500}
-  .alert.ok{background:#E8F5E9;color:#2E7D32}
   .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   @media(min-width:600px){.info-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
   .info-item{background:#f7f7f7;border-radius:10px;padding:8px 10px;font-size:11px;color:#888;line-height:1.4}
@@ -118,6 +123,10 @@
             <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
           </div>
         </div>
+        <div class="remain-box" id="remain-box" style="display:none">
+          <span class="remain-label">💳 วงเงินคงเหลือหลังซื้อ</span>
+          <span class="remain-val ok" id="remain-val">—</span>
+        </div>
         <div id="alert-box"></div>
       </div>
 
@@ -167,6 +176,7 @@ function calc(){
     document.getElementById('you').textContent='—';
     document.getElementById('gov-sub').textContent='60% ของราคา';
     document.getElementById('you-sub').textContent='40% ที่เหลือ';
+    document.getElementById('remain-box').style.display='none';
     document.getElementById('alert-box').innerHTML='';
     return;
   }
@@ -181,6 +191,15 @@ function calc(){
   document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
   document.getElementById('bg').style.width=gp+'%';
   document.getElementById('bb').style.width=yp+'%';
+  if(hasBudget){
+    var rem=parseFloat((b-g).toFixed(2));
+    document.getElementById('remain-box').style.display='flex';
+    var rv=document.getElementById('remain-val');
+    rv.textContent=fmt(rem);
+    rv.className='remain-val '+(rem===0?'empty':rem<=50?'low':'ok');
+  } else {
+    document.getElementById('remain-box').style.display='none';
+  }
   var msg='';
   if(b===0){
     msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';
@@ -188,8 +207,6 @@ function calc(){
     msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';
   } else if(p*0.6>200){
     msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';
-  } else {
-    msg='<div class="alert ok">✅ ประหยัดได้ '+fmt(g)+' ('+gp+'%) จ่ายจริงแค่ '+fmt(y)+'</div>';
   }
   document.getElementById('alert-box').innerHTML=msg;
 }
