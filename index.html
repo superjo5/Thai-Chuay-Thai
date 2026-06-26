@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1D9E75">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -12,46 +12,52 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{min-height:100%;background:#f4f6f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-  body{display:flex;flex-direction:column;align-items:center;padding-bottom:24px}
-  .app{width:100%;max-width:480px;padding:12px;display:flex;flex-direction:column;gap:10px}
+  body{display:flex;justify-content:center;padding:12px 12px 32px}
+  .app{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px}
   .topbar{background:#1D9E75;border-radius:14px;padding:11px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
-  .topbar h1{font-size:16px;font-weight:600}
-  .topbar .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px}
-  .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .topbar h1{font-size:clamp(14px,3vw,18px);font-weight:600}
+  .topbar .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .main-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
+  .inputs-col,.results-col{display:flex;flex-direction:column;gap:10px}
   .card{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 1px 8px rgba(0,0,0,.06)}
   .lbl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
   .inp-row{display:flex;align-items:center;gap:6px}
-  .baht{font-size:22px;font-weight:600;color:#bbb}
-  input[type=text]{flex:1;font-size:28px;font-weight:700;color:#222;background:#f7f7f7;border:2px solid #eee;border-radius:10px;padding:8px 12px;outline:none;width:100%}
+  .baht{font-size:18px;font-weight:600;color:#bbb;flex-shrink:0}
+  input[type=text]{flex:1;min-width:0;font-size:clamp(20px,4vw,28px);font-weight:700;color:#222;background:#f7f7f7;border:2px solid #eee;border-radius:10px;padding:8px 12px;outline:none;width:100%}
   input[type=text]:focus{border-color:#1D9E75;background:#f0fbf7}
   .bbar-bg{height:6px;border-radius:3px;background:#eee;overflow:hidden;margin:8px 0 4px}
   .bbar-fill{height:100%;border-radius:3px;background:#1D9E75;transition:width .2s}
   .bbar-fill.low{background:#E07B00}
   .bbar-fill.empty{background:#E24B4A}
   .blabels{display:flex;justify-content:space-between;font-size:10px;color:#aaa}
-  .max-hint{font-size:11px;color:#999;margin-top:6px;line-height:1.4}
-  .max-hint strong{color:#222;font-weight:700}
+  .max-box{background:#e8f5f1;border:1px solid #9FE1CB;border-radius:10px;padding:10px 12px;margin-top:10px}
+  .max-box-label{font-size:11px;color:#085041;font-weight:600;margin-bottom:4px}
+  .max-box-val{font-size:clamp(18px,4vw,24px);font-weight:700;color:#0F6E56;line-height:1.1}
+  .max-box-sub{font-size:11px;color:#3C8C6A;margin-top:2px}
   .split-bar{height:10px;border-radius:5px;background:#eee;display:flex;overflow:hidden;margin-bottom:8px}
   .bar-g{background:#1D9E75;transition:width .2s;min-width:0}
   .bar-b{background:#378ADD;transition:width .2s;flex:1}
   .legend{display:flex;gap:10px;font-size:11px;color:#888;margin-bottom:12px}
   .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
-  .result-card{border-radius:12px;padding:14px 16px}
-  .result-card.gov-card{background:#e8f5f1;border:1px solid #9FE1CB}
-  .result-card.you-card{background:#e6f1fb;border:1px solid #B5D4F4}
-  .rc-label{font-size:12px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .res-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .rc{border-radius:12px;padding:12px 14px}
+  .rc.gov{background:#e8f5f1;border:1px solid #9FE1CB}
+  .rc.you{background:#e6f1fb;border:1px solid #B5D4F4}
+  .rc-label{font-size:11px;font-weight:600;margin-bottom:5px}
   .rc-label.green{color:#085041}
   .rc-label.blue{color:#042C53}
-  .rc-amount{font-size:36px;font-weight:700;line-height:1}
+  .rc-amount{font-size:clamp(20px,4vw,32px);font-weight:700;line-height:1;word-break:break-all}
   .rc-amount.green{color:#0F6E56}
   .rc-amount.blue{color:#185FA5}
-  .rc-sub{font-size:11px;margin-top:4px}
-  .rc-sub.green{color:#085041}
-  .rc-sub.blue{color:#042C53}
+  .rc-sub{font-size:11px;margin-top:3px}
+  .rc-sub.green{color:#3C8C6A}
+  .rc-sub.blue{color:#185FA5}
   .alert{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px}
   .alert.warn{background:#FFF8E1;color:#9A6500}
   .alert.ok{background:#E8F5E9;color:#2E7D32}
   .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  @media(min-width:600px){.info-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
   .info-item{background:#f7f7f7;border-radius:10px;padding:8px 10px;font-size:11px;color:#888;line-height:1.4}
   .info-item strong{color:#333;display:block;font-weight:600;font-size:12px;margin-bottom:1px}
 </style>
@@ -63,59 +69,67 @@
     <span class="badge">60 / 40</span>
   </div>
 
-  <div class="row2">
-    <div class="card">
-      <div class="lbl">วงเงินรัฐเหลือวันนี้</div>
-      <div class="inp-row">
-        <span class="baht">฿</span>
-        <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc()">
+  <div class="main-grid">
+    <div class="inputs-col">
+      <div class="card">
+        <div class="lbl">วงเงินรัฐเหลือวันนี้</div>
+        <div class="inp-row">
+          <span class="baht">฿</span>
+          <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc()">
+        </div>
+        <div id="bbar-wrap" style="display:none">
+          <div class="bbar-bg"><div class="bbar-fill" id="bbar" style="width:100%"></div></div>
+          <div class="blabels"><span id="bleft">—</span><span>/ 200 ฿</span></div>
+          <div class="max-box" id="max-box" style="display:none">
+            <div class="max-box-label">🛒 ซื้อได้สูงสุดเพื่อใช้วงเงินเต็ม</div>
+            <div class="max-box-val" id="max-price">—</div>
+            <div class="max-box-sub" id="max-sub">—</div>
+          </div>
+        </div>
       </div>
-      <div id="bbar-wrap" style="display:none">
-        <div class="bbar-bg"><div class="bbar-fill" id="bbar" style="width:100%"></div></div>
-        <div class="blabels"><span id="bleft">—</span><span>/ 200 ฿</span></div>
-        <div class="max-hint" id="max-hint"></div>
+      <div class="card">
+        <div class="lbl">ราคาสินค้า</div>
+        <div class="inp-row">
+          <span class="baht">฿</span>
+          <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
+        </div>
       </div>
     </div>
-    <div class="card">
-      <div class="lbl">ราคาสินค้า</div>
-      <div class="inp-row">
-        <span class="baht">฿</span>
-        <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
-      </div>
-    </div>
-  </div>
 
-  <div class="card">
-    <div class="split-bar">
-      <div class="bar-g" id="bg" style="width:60%"></div>
-      <div class="bar-b" id="bb" style="width:40%"></div>
-    </div>
-    <div class="legend">
-      <span><span class="dot" style="background:#1D9E75"></span>รัฐออก</span>
-      <span><span class="dot" style="background:#378ADD"></span>คุณออก</span>
-    </div>
-    <div class="row2">
-      <div class="result-card gov-card">
-        <div class="rc-label green">🏛 รัฐออกให้</div>
-        <div class="rc-amount green" id="gov">—</div>
-        <div class="rc-sub green" id="gov-sub">60% ของราคา</div>
+    <div class="results-col">
+      <div class="card">
+        <div class="split-bar">
+          <div class="bar-g" id="bg" style="width:60%"></div>
+          <div class="bar-b" id="bb" style="width:40%"></div>
+        </div>
+        <div class="legend">
+          <span><span class="dot" style="background:#1D9E75"></span>รัฐออก</span>
+          <span><span class="dot" style="background:#378ADD"></span>คุณออก</span>
+        </div>
+        <div class="res-row">
+          <div class="rc gov">
+            <div class="rc-label green">🏛 รัฐออกให้</div>
+            <div class="rc-amount green" id="gov">—</div>
+            <div class="rc-sub green" id="gov-sub">60% ของราคา</div>
+          </div>
+          <div class="rc you">
+            <div class="rc-label blue">👤 คุณจ่าย</div>
+            <div class="rc-amount blue" id="you">—</div>
+            <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
+          </div>
+        </div>
+        <div id="alert-box"></div>
       </div>
-      <div class="result-card you-card">
-        <div class="rc-label blue">👤 คุณจ่าย</div>
-        <div class="rc-amount blue" id="you">—</div>
-        <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
-      </div>
-    </div>
-    <div id="alert-box"></div>
-  </div>
 
-  <div class="card">
-    <div class="lbl">ข้อมูลโครงการ</div>
-    <div class="info-grid">
-      <div class="info-item"><strong>📅 ระยะเวลา</strong>1 มิ.ย. – 30 ก.ย. 2569</div>
-      <div class="info-item"><strong>💰 วงเงิน</strong>1,000 ฿/เดือน · รวม 4,000 ฿</div>
-      <div class="info-item"><strong>⏰ เวลาใช้สิทธิ์</strong>06:00 – 23:00 น.</div>
-      <div class="info-item"><strong>⚠️ หมายเหตุ</strong>วงเงินไม่สะสมข้ามเดือน</div>
+      <div class="card">
+        <div class="lbl">ข้อมูลโครงการ</div>
+        <div class="info-grid">
+          <div class="info-item"><strong>📅 ระยะเวลา</strong>1 มิ.ย. – 30 ก.ย. 2569</div>
+          <div class="info-item"><strong>💰 วงเงิน</strong>1,000 ฿/เดือน · รวม 4,000 ฿</div>
+          <div class="info-item"><strong>⏰ เวลาใช้สิทธิ์</strong>06:00 – 23:00 น.</div>
+          <div class="info-item"><strong>⚠️ หมายเหตุ</strong>วงเงินไม่สะสมข้ามเดือน</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -137,9 +151,11 @@ function calc(){
     if(b>0){
       var maxP=parseFloat((b/0.6).toFixed(2));
       var youMax=parseFloat((maxP-b).toFixed(2));
-      document.getElementById('max-hint').innerHTML='ซื้อได้สูงสุด <strong>'+fmt(maxP)+'</strong> (คุณออก '+fmt(youMax)+')';
+      document.getElementById('max-box').style.display='block';
+      document.getElementById('max-price').textContent=fmt(maxP);
+      document.getElementById('max-sub').textContent='รัฐออก '+fmt(b)+' · คุณออก '+fmt(youMax);
     } else {
-      document.getElementById('max-hint').innerHTML='วงเงินหมดแล้ว';
+      document.getElementById('max-box').style.display='none';
     }
   } else {
     document.getElementById('bbar-wrap').style.display='none';
