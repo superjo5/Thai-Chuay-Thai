@@ -44,7 +44,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);transition:background .2s,color .2s}
 body{display:flex;justify-content:center;padding:12px 12px 32px}
-.app{width:100%;max-width:1100px;display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
+.app{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
 .topbar{background:#1D9E75;border-radius:clamp(12px,2vw,16px);padding:clamp(10px,1.5vw,14px) clamp(14px,2vw,20px);color:#fff;display:flex;justify-content:space-between;align-items:center}
 .topbar h1{font-size:clamp(1rem,2.5vw,1.4rem);font-weight:600}
 .topbar-right{display:flex;align-items:center;gap:clamp(6px,1vw,10px)}
@@ -55,6 +55,19 @@ body{display:flex;justify-content:center;padding:12px 12px 32px}
 .info-btn:active{background:rgba(255,255,255,.4)}
 .main-grid{display:grid;grid-template-columns:1fr;gap:clamp(8px,1.5vw,14px)}
 @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
+@media(min-width:600px) and (orientation:portrait){
+  body{min-height:100svh}
+  .app{min-height:calc(100svh - 24px)}
+  .main-grid{flex:1;min-height:0}
+  .results-col .card:first-child{flex:1}
+}
+@media(max-width:599px){
+  .inputs-col .card,.results-col .card{padding:clamp(14px,4vw,22px) clamp(16px,4.5vw,24px)}
+  input[type=text]{font-size:clamp(1.8rem,7vw,2.8rem)}
+  .rc-amount{font-size:clamp(1.6rem,7vw,2.8rem)}
+  .ritem-val{font-size:clamp(1.1rem,5vw,1.8rem)}
+  .max-box-val{font-size:clamp(1.3rem,5.5vw,2rem)}
+}
 .inputs-col,.results-col{display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
 .card{background:var(--card);border-radius:clamp(14px,2vw,20px);padding:clamp(12px,1.8vw,20px) clamp(14px,2vw,22px);box-shadow:var(--shadow);transition:background .2s}
 .lbl{font-size:clamp(.65rem,1.3vw,.85rem);font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:clamp(6px,1vw,10px)}
@@ -186,8 +199,8 @@ input[type=text]:focus{border-color:#1D9E75}
           </div>
         </div>
         <div class="extra-box" id="extra-box">
-          <div class="extra-box-label">⚡ จ่ายเกินกว่าปกติ (40%)</div>
-          <div class="extra-row"><span class="extra-desc">ปกติจ่าย 40% =</span><span class="extra-val" id="extra-normal">—</span></div>
+          <div class="extra-box-label">⚡ จ่ายเกินกว่าถ้าวงเงินรัฐพอ</div>
+          <div class="extra-row"><span class="extra-desc">ถ้าวงเงินรัฐพอ คุณออกแค่ =</span><span class="extra-val" id="extra-normal">—</span></div>
           <div class="extra-row"><span class="extra-desc">จ่ายจริง =</span><span class="extra-val" id="extra-actual">—</span></div>
           <div class="extra-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--warn-text)">
             <span class="extra-desc" style="font-weight:700;opacity:1">จ่ายเกินไป</span>
@@ -258,10 +271,16 @@ function calc(){
   var rv1=document.getElementById('remain-gov');var rv2=document.getElementById('remain-buy');
   rv1.textContent=fmt(remGov);rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
   rv2.textContent=fmt(remBuy);rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
-  var normalPay=parseFloat((p*0.4).toFixed(2));var extraPay=parseFloat((y-normalPay).toFixed(2));
+  // เปรียบกับ "ถ้าวงเงินรัฐพอ" = ซื้อที่ราคา cap สูงสุด b/0.6 แล้วคุณออก 40% = b/0.6*0.4 = b*2/3
+  var normalPay=parseFloat((b*(2/3)).toFixed(2));
+  var extraPay=parseFloat((y-normalPay).toFixed(2));
   var eb=document.getElementById('extra-box');
-  if(extraPay>0.005){eb.style.display='block';document.getElementById('extra-normal').textContent=fmt(normalPay);document.getElementById('extra-actual').textContent=fmt(y);document.getElementById('extra-diff').textContent='+'+fmt(extraPay);}
-  else{eb.style.display='none';}
+  if(extraPay>0.005){
+    eb.style.display='block';
+    document.getElementById('extra-normal').textContent=fmt(normalPay);
+    document.getElementById('extra-actual').textContent=fmt(y);
+    document.getElementById('extra-diff').textContent='+'+fmt(extraPay);
+  } else {eb.style.display='none';}
   var msg='';
   if(b===0){msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';}
   else if(hasBudget&&gIdeal>b){msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';}
