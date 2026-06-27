@@ -59,19 +59,49 @@ input:checked+.theme-track:before{transform:translateX(20px)}
 .info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:20px;padding:4px 10px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .info-btn:active{background:rgba(255,255,255,.4)}
 .main-grid{display:grid;grid-template-columns:1fr;gap:clamp(8px,1.5vw,14px)}
-@media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
-@media(min-width:600px) and (orientation:portrait){
-  body{min-height:100svh}
-  .app{min-height:calc(100svh - 24px)}
-  .main-grid{flex:1;min-height:0}
-  .results-col .card:first-child{flex:1}
+
+/* แท็บเล็ตแนวนอน: 2 คอลัมน์ */
+@media(min-width:700px) and (orientation:landscape){
+  .main-grid{grid-template-columns:1fr 1fr;align-items:start}
 }
+
+/* แท็บเล็ตแนวตั้ง: 1 คอลัมน์ เต็มหน้าจอ font ใหญ่ */
+@media(min-width:600px) and (orientation:portrait){
+  .card{padding:clamp(18px,2.5vw,28px) clamp(20px,2.8vw,30px)}
+  .lbl{font-size:clamp(.8rem,1.6vw,1rem)}
+  .baht{font-size:clamp(1.6rem,3.5vw,2.4rem)}
+  input[type=text]{font-size:clamp(2.4rem,6vw,4rem);padding:12px 18px;border-radius:16px}
+  .rc{padding:clamp(16px,2.5vw,24px) clamp(18px,2.8vw,26px)}
+  .rc-label{font-size:clamp(.85rem,1.6vw,1.1rem);margin-bottom:8px}
+  .rc-amount{font-size:clamp(2.2rem,5.5vw,3.5rem)}
+  .rc-sub{font-size:clamp(.8rem,1.5vw,1rem)}
+  .split-bar{height:clamp(12px,1.8vw,18px);margin-bottom:12px}
+  .legend{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:16px;gap:16px}
+  .dot{width:10px;height:10px}
+  .ritem{padding:clamp(12px,2vw,20px) clamp(14px,2.2vw,22px)}
+  .ritem-label{font-size:clamp(.75rem,1.4vw,.95rem);margin-bottom:6px}
+  .ritem-val{font-size:clamp(1.4rem,3.5vw,2.2rem)}
+  .remain-grid{gap:clamp(10px,1.8vw,16px);margin-top:clamp(12px,2vw,18px)}
+  .max-box{padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,22px)}
+  .max-box-label{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:6px}
+  .max-box-val{font-size:clamp(1.8rem,4vw,2.8rem)}
+  .max-box-sub{font-size:clamp(.8rem,1.5vw,1rem);margin-top:4px}
+  .extra-box{padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,22px)}
+  .extra-box-label{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:8px}
+  .extra-desc{font-size:clamp(.85rem,1.6vw,1.05rem)}
+  .extra-val{font-size:clamp(1.2rem,3vw,1.8rem)}
+  .bbar-bg{height:10px;margin:12px 0 6px}
+  .blabels{font-size:clamp(.7rem,1.3vw,.9rem)}
+  .alert{font-size:clamp(.85rem,1.6vw,1.05rem);padding:14px 16px}
+}
+
+/* มือถือปกติ */
 @media(max-width:599px){
-  .inputs-col .card,.results-col .card{padding:clamp(14px,4vw,22px) clamp(16px,4.5vw,24px)}
-  input[type=text]{font-size:clamp(1.8rem,7vw,2.8rem)}
-  .rc-amount{font-size:clamp(1.6rem,7vw,2.8rem)}
-  .ritem-val{font-size:clamp(1.1rem,5vw,1.8rem)}
-  .max-box-val{font-size:clamp(1.3rem,5.5vw,2rem)}
+  .inputs-col .card,.results-col .card{padding:clamp(14px,4vw,20px) clamp(16px,4.5vw,22px)}
+  input[type=text]{font-size:clamp(1.8rem,7vw,2.6rem)}
+  .rc-amount{font-size:clamp(1.6rem,7vw,2.6rem)}
+  .ritem-val{font-size:clamp(1.1rem,5vw,1.6rem)}
+  .max-box-val{font-size:clamp(1.3rem,5.5vw,1.8rem)}
 }
 .inputs-col,.results-col{display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
 .card{background:var(--card);border-radius:clamp(14px,2vw,20px);padding:clamp(12px,1.8vw,20px) clamp(14px,2vw,22px);box-shadow:var(--shadow);transition:background .2s}
