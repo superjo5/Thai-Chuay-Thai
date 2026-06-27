@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1D9E75">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ไทยช่วยไทย">
+<title>ไทยช่วยไทย พลัส</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%;background:#f4f6f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  body{display:flex;justify-content:center;padding:12px 12px 32px}
+  .app{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px}
+  .topbar{background:#1D9E75;border-radius:14px;padding:11px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+  .topbar h1{font-size:clamp(14px,3vw,18px);font-weight:600}
+  .topbar-right{display:flex;align-items:center;gap:8px}
+  .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .info-btn:active{background:rgba(255,255,255,.4)}
+  .main-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
+  .inputs-col,.results-col{display:flex;flex-direction:column;gap:10px}
+  .card{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+  .lbl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+  .inp-row{display:flex;align-items:center;gap:6px}
+  .baht{font-size:18px;font-weight:600;color:#bbb;flex-shrink:0}
+  input[type=text]{flex:1;min-width:0;font-size:clamp(20px,4vw,28px);font-weight:700;color:#222;background:#f7f7f7;border:2px solid #eee;border-radius:10px;padding:8px 12px;outline:none;width:100%}
+  input[type=text]:focus{border-color:#1D9E75;background:#f0fbf7}
+  .bbar-bg{height:6px;border-radius:3px;background:#eee;overflow:hidden;margin:8px 0 4px}
+  .bbar-fill{height:100%;border-radius:3px;background:#1D9E75;transition:width .2s}
+  .bbar-fill.low{background:#E07B00}
+  .bbar-fill.empty{background:#E24B4A}
+  .blabels{display:flex;justify-content:space-between;font-size:10px;color:#aaa}
+  .max-box{background:#e8f5f1;border:1px solid #9FE1CB;border-radius:10px;padding:10px 12px;margin-top:10px}
+  .max-box-label{font-size:11px;color:#085041;font-weight:600;margin-bottom:4px}
+  .max-box-val{font-size:clamp(18px,4vw,24px);font-weight:700;color:#0F6E56;line-height:1.1}
+  .max-box-sub{font-size:11px;color:#3C8C6A;margin-top:2px}
+  .split-bar{height:10px;border-radius:5px;background:#eee;display:flex;overflow:hidden;margin-bottom:8px}
+  .bar-g{background:#1D9E75;transition:width .2s;min-width:0}
+  .bar-b{background:#378ADD;transition:width .2s;flex:1}
+  .legend{display:flex;gap:10px;font-size:11px;color:#888;margin-bottom:12px}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
+  .res-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .rc{border-radius:12px;padding:12px 14px}
+  .rc.gov{background:#e8f5f1;border:1px solid #9FE1CB}
+  .rc.you{background:#e6f1fb;border:1px solid #B5D4F4}
+  .rc-label{font-size:11px;font-weight:600;margin-bottom:5px}
+  .rc-label.green{color:#085041}
+  .rc-label.blue{color:#042C53}
+  .rc-amount{font-size:clamp(20px,4vw,32px);font-weight:700;line-height:1;word-break:break-all}
+  .rc-amount.green{color:#0F6E56}
+  .rc-amount.blue{color:#185FA5}
+  .rc-sub{font-size:11px;margin-top:3px}
+  .rc-sub.green{color:#3C8C6A}
+  .rc-sub.blue{color:#185FA5}
+  .remain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+  .ritem{background:#f7f7f7;border:1px solid #eee;border-radius:10px;padding:10px 12px}
+  .ritem-label{font-size:10px;color:#888;margin-bottom:4px;line-height:1.4}
+  .ritem-val{font-size:clamp(16px,4vw,20px);font-weight:700}
+  .ritem-val.ok{color:#0F6E56}
+  .ritem-val.low{color:#E07B00}
+  .ritem-val.empty{color:#E24B4A}
+  .alert{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px}
+  .alert.warn{background:#FFF8E1;color:#9A6500}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+  .modal h3{font-size:16px;font-weight:700;color:#222;margin-bottom:14px}
+  .modal-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5}
+  .modal-row:last-of-type{border-bottom:none;padding-bottom:0}
+  .modal-icon{font-size:18px;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
+  .modal-text .mt{font-size:13px;color:#333;font-weight:600}
+  .modal-text .ms{font-size:12px;color:#888;margin-top:1px}
+  .modal-close{width:100%;margin-top:16px;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}
+  .modal-close:active{background:#0F6E56}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <h1>ไทยช่วยไทย พลัส 💚</h1>
+    <div class="topbar-right">
+      <span class="badge">60 / 40</span>
+      <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'" aria-label="ข้อมูลโครงการ">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="inputs-col">
+      <div class="card">
+        <div class="lbl">วงเงินรัฐเหลือวันนี้</div>
+        <div class="inp-row">
+          <span class="baht">฿</span>
+          <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc()">
+        </div>
+        <div id="bbar-wrap" style="display:none">
+          <div class="bbar-bg"><div class="bbar-fill" id="bbar" style="width:100%"></div></div>
+          <div class="blabels"><span id="bleft">—</span><span>/ 200 ฿</span></div>
+          <div class="max-box" id="max-box" style="display:none">
+            <div class="max-box-label">🛒 ซื้อได้สูงสุดเพื่อใช้วงเงินเต็ม</div>
+            <div class="max-box-val" id="max-price">—</div>
+            <div class="max-box-sub" id="max-sub">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lbl">ราคาสินค้า</div>
+        <div class="inp-row">
+          <span class="baht">฿</span>
+          <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
+        </div>
+      </div>
+    </div>
+
+    <div class="results-col">
+      <div class="card">
+        <div class="split-bar">
+          <div class="bar-g" id="bg" style="width:60%"></div>
+          <div class="bar-b" id="bb" style="width:40%"></div>
+        </div>
+        <div class="legend">
+          <span><span class="dot" style="background:#1D9E75"></span>รัฐออก</span>
+          <span><span class="dot" style="background:#378ADD"></span>คุณออก</span>
+        </div>
+        <div class="res-row">
+          <div class="rc gov">
+            <div class="rc-label green">🏛 รัฐออกให้</div>
+            <div class="rc-amount green" id="gov">—</div>
+            <div class="rc-sub green" id="gov-sub">60% ของราคา</div>
+          </div>
+          <div class="rc you">
+            <div class="rc-label blue">👤 คุณจ่าย</div>
+            <div class="rc-amount blue" id="you">—</div>
+            <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
+          </div>
+        </div>
+        <div class="remain-grid" id="remain-grid" style="display:none">
+          <div class="ritem">
+            <div class="ritem-label">วงเงินรัฐที่เหลือ<br>หลังซื้อครั้งนี้</div>
+            <div class="ritem-val ok" id="remain-gov">—</div>
+          </div>
+          <div class="ritem">
+            <div class="ritem-label">ยังซื้อสินค้าได้<br>เพิ่มอีกสูงสุด</div>
+            <div class="ritem-val ok" id="remain-buy">—</div>
+          </div>
+        </div>
+        <div id="alert-box"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <h3>ข้อมูลโครงการ ไทยช่วยไทย พลัส</h3>
+    <div class="modal-row"><div class="modal-icon">📅</div><div class="modal-text"><div class="mt">ระยะเวลา</div><div class="ms">1 มิ.ย. – 30 ก.ย. 2569 (4 เดือน)</div></div></div>
+    <div class="modal-row"><div class="modal-icon">💰</div><div class="modal-text"><div class="mt">วงเงิน</div><div class="ms">1,000 ฿/เดือน · รวมตลอดโครงการ 4,000 ฿</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📆</div><div class="modal-text"><div class="mt">วันโอนวงเงิน</div><div class="ms">ทุกวันที่ 1 ของเดือน</div></div></div>
+    <div class="modal-row"><div class="modal-icon">⏰</div><div class="modal-text"><div class="mt">เวลาใช้สิทธิ์</div><div class="ms">06:00 – 23:00 น. ทุกวัน</div></div></div>
+    <div class="modal-row"><div class="modal-icon">⚠️</div><div class="modal-text"><div class="mt">วงเงินไม่สะสมข้ามเดือน</div><div class="ms">ใช้ไม่หมดภายในเดือน หมดสิทธิ์ทันที</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📱</div><div class="modal-text"><div class="mt">ช่องทางใช้สิทธิ์</div><div class="ms">แอป เป๋าตัง (G-Wallet)</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📞</div><div class="modal-text"><div class="mt">ติดต่อสอบถาม</div><div class="ms">0-2111-1122 (24 ชม.)</div></div></div>
+    <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">ปิด</button>
+  </div>
+</div>
+
+<script>
+function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' ฿'}
+function parseNum(s){var v=parseFloat(s.replace(/[^0-9.]/g,''));return isNaN(v)?0:v;}
+function calc(){
+  var p=parseNum(document.getElementById('price').value);
+  var bRaw=document.getElementById('budget').value.trim();
+  var hasBudget=bRaw!=='';
+  var b=hasBudget?Math.min(parseNum(bRaw),200):200;
+  if(hasBudget){
+    document.getElementById('bbar-wrap').style.display='block';
+    var bPct=Math.min(100,Math.round((b/200)*100));
+    var bar=document.getElementById('bbar');
+    bar.style.width=bPct+'%';
+    bar.className='bbar-fill'+(b===0?' empty':b<=50?' low':'');
+    document.getElementById('bleft').textContent='เหลือ '+fmt(b);
+    if(b>0){
+      var maxP=parseFloat((b/0.6).toFixed(2));
+      var youMax=parseFloat((maxP-b).toFixed(2));
+      document.getElementById('max-box').style.display='block';
+      document.getElementById('max-price').textContent=fmt(maxP);
+      document.getElementById('max-sub').textContent='รัฐออก '+fmt(b)+' · คุณออก '+fmt(youMax);
+    } else {
+      document.getElementById('max-box').style.display='none';
+    }
+  } else {
+    document.getElementById('bbar-wrap').style.display='none';
+  }
+  if(!p){
+    document.getElementById('bg').style.width='60%';
+    document.getElementById('bb').style.width='40%';
+    document.getElementById('gov').textContent='—';
+    document.getElementById('you').textContent='—';
+    document.getElementById('gov-sub').textContent='60% ของราคา';
+    document.getElementById('you-sub').textContent='40% ที่เหลือ';
+    document.getElementById('remain-grid').style.display='none';
+    document.getElementById('alert-box').innerHTML='';
+    return;
+  }
+  var gIdeal=parseFloat(Math.min(p*0.6,200).toFixed(2));
+  var g=parseFloat(Math.min(gIdeal,b).toFixed(2));
+  var y=parseFloat((p-g).toFixed(2));
+  var gp=Math.round((g/p)*100);
+  var yp=100-gp;
+  document.getElementById('gov').textContent=fmt(g);
+  document.getElementById('you').textContent=fmt(y);
+  document.getElementById('gov-sub').textContent=gp+'% ของราคา';
+  document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
+  document.getElementById('bg').style.width=gp+'%';
+  document.getElementById('bb').style.width=yp+'%';
+  if(hasBudget){
+    var remGov=parseFloat((b-g).toFixed(2));
+    var remBuy=parseFloat((remGov/0.6).toFixed(2));
+    document.getElementById('remain-grid').style.display='grid';
+    var rv1=document.getElementById('remain-gov');
+    var rv2=document.getElementById('remain-buy');
+    rv1.textContent=fmt(remGov);
+    rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
+    rv2.textContent=fmt(remBuy);
+    rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
+  } else {
+    document.getElementById('remain-grid').style.display='none';
+  }
+  var msg='';
+  if(b===0){
+    msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';
+  } else if(hasBudget&&gIdeal>b){
+    msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';
+  } else if(p*0.6>200){
+    msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';
+  }
+  document.getElementById('alert-box').innerHTML=msg;
+}
+</script>
+<script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>
