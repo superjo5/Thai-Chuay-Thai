@@ -16,7 +16,10 @@
   .app{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px}
   .topbar{background:#1D9E75;border-radius:14px;padding:11px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
   .topbar h1{font-size:clamp(14px,3vw,18px);font-weight:600}
-  .topbar .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .topbar-right{display:flex;align-items:center;gap:8px}
+  .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .info-btn:active{background:rgba(255,255,255,.4)}
   .main-grid{display:grid;grid-template-columns:1fr;gap:10px}
   @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
   .inputs-col,.results-col{display:flex;flex-direction:column;gap:10px}
@@ -53,25 +56,35 @@
   .rc-sub{font-size:11px;margin-top:3px}
   .rc-sub.green{color:#3C8C6A}
   .rc-sub.blue{color:#185FA5}
-  .remain-box{border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;background:#f7f7f7;border:1px solid #eee}
-  .remain-label{font-size:12px;color:#777}
-  .remain-val{font-size:clamp(18px,4vw,22px);font-weight:700}
-  .remain-val.ok{color:#0F6E56}
-  .remain-val.low{color:#E07B00}
-  .remain-val.empty{color:#E24B4A}
+  .remain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+  .ritem{background:#f7f7f7;border:1px solid #eee;border-radius:10px;padding:10px 12px}
+  .ritem-label{font-size:10px;color:#888;margin-bottom:4px;line-height:1.4}
+  .ritem-val{font-size:clamp(16px,4vw,20px);font-weight:700}
+  .ritem-val.ok{color:#0F6E56}
+  .ritem-val.low{color:#E07B00}
+  .ritem-val.empty{color:#E24B4A}
   .alert{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px}
   .alert.warn{background:#FFF8E1;color:#9A6500}
-  .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-  @media(min-width:600px){.info-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-  .info-item{background:#f7f7f7;border-radius:10px;padding:8px 10px;font-size:11px;color:#888;line-height:1.4}
-  .info-item strong{color:#333;display:block;font-weight:600;font-size:12px;margin-bottom:1px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+  .modal h3{font-size:16px;font-weight:700;color:#222;margin-bottom:14px}
+  .modal-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5}
+  .modal-row:last-of-type{border-bottom:none;padding-bottom:0}
+  .modal-icon{font-size:18px;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
+  .modal-text .mt{font-size:13px;color:#333;font-weight:600}
+  .modal-text .ms{font-size:12px;color:#888;margin-top:1px}
+  .modal-close{width:100%;margin-top:16px;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}
+  .modal-close:active{background:#0F6E56}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="topbar">
     <h1>ไทยช่วยไทย พลัส 💚</h1>
-    <span class="badge">60 / 40</span>
+    <div class="topbar-right">
+      <span class="badge">60 / 40</span>
+      <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'" aria-label="ข้อมูลโครงการ">ℹ️</button>
+    </div>
   </div>
 
   <div class="main-grid">
@@ -123,25 +136,36 @@
             <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
           </div>
         </div>
-        <div class="remain-box" id="remain-box" style="display:none">
-          <span class="remain-label">💳 วงเงินคงเหลือหลังซื้อ</span>
-          <span class="remain-val ok" id="remain-val">—</span>
+        <div class="remain-grid" id="remain-grid" style="display:none">
+          <div class="ritem">
+            <div class="ritem-label">วงเงินรัฐที่เหลือ<br>หลังซื้อครั้งนี้</div>
+            <div class="ritem-val ok" id="remain-gov">—</div>
+          </div>
+          <div class="ritem">
+            <div class="ritem-label">ยังซื้อสินค้าได้<br>เพิ่มอีกสูงสุด</div>
+            <div class="ritem-val ok" id="remain-buy">—</div>
+          </div>
         </div>
         <div id="alert-box"></div>
-      </div>
-
-      <div class="card">
-        <div class="lbl">ข้อมูลโครงการ</div>
-        <div class="info-grid">
-          <div class="info-item"><strong>📅 ระยะเวลา</strong>1 มิ.ย. – 30 ก.ย. 2569</div>
-          <div class="info-item"><strong>💰 วงเงิน</strong>1,000 ฿/เดือน · รวม 4,000 ฿</div>
-          <div class="info-item"><strong>⏰ เวลาใช้สิทธิ์</strong>06:00 – 23:00 น.</div>
-          <div class="info-item"><strong>⚠️ หมายเหตุ</strong>วงเงินไม่สะสมข้ามเดือน</div>
-        </div>
       </div>
     </div>
   </div>
 </div>
+
+<div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <h3>ข้อมูลโครงการ ไทยช่วยไทย พลัส</h3>
+    <div class="modal-row"><div class="modal-icon">📅</div><div class="modal-text"><div class="mt">ระยะเวลา</div><div class="ms">1 มิ.ย. – 30 ก.ย. 2569 (4 เดือน)</div></div></div>
+    <div class="modal-row"><div class="modal-icon">💰</div><div class="modal-text"><div class="mt">วงเงิน</div><div class="ms">1,000 ฿/เดือน · รวมตลอดโครงการ 4,000 ฿</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📆</div><div class="modal-text"><div class="mt">วันโอนวงเงิน</div><div class="ms">ทุกวันที่ 1 ของเดือน</div></div></div>
+    <div class="modal-row"><div class="modal-icon">⏰</div><div class="modal-text"><div class="mt">เวลาใช้สิทธิ์</div><div class="ms">06:00 – 23:00 น. ทุกวัน</div></div></div>
+    <div class="modal-row"><div class="modal-icon">⚠️</div><div class="modal-text"><div class="mt">วงเงินไม่สะสมข้ามเดือน</div><div class="ms">ใช้ไม่หมดภายในเดือน หมดสิทธิ์ทันที</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📱</div><div class="modal-text"><div class="mt">ช่องทางใช้สิทธิ์</div><div class="ms">แอป เป๋าตัง (G-Wallet)</div></div></div>
+    <div class="modal-row"><div class="modal-icon">📞</div><div class="modal-text"><div class="mt">ติดต่อสอบถาม</div><div class="ms">0-2111-1122 (24 ชม.)</div></div></div>
+    <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">ปิด</button>
+  </div>
+</div>
+
 <script>
 function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' ฿'}
 function parseNum(s){var v=parseFloat(s.replace(/[^0-9.]/g,''));return isNaN(v)?0:v;}
@@ -176,7 +200,7 @@ function calc(){
     document.getElementById('you').textContent='—';
     document.getElementById('gov-sub').textContent='60% ของราคา';
     document.getElementById('you-sub').textContent='40% ที่เหลือ';
-    document.getElementById('remain-box').style.display='none';
+    document.getElementById('remain-grid').style.display='none';
     document.getElementById('alert-box').innerHTML='';
     return;
   }
@@ -192,13 +216,17 @@ function calc(){
   document.getElementById('bg').style.width=gp+'%';
   document.getElementById('bb').style.width=yp+'%';
   if(hasBudget){
-    var rem=parseFloat((b-g).toFixed(2));
-    document.getElementById('remain-box').style.display='flex';
-    var rv=document.getElementById('remain-val');
-    rv.textContent=fmt(rem);
-    rv.className='remain-val '+(rem===0?'empty':rem<=50?'low':'ok');
+    var remGov=parseFloat((b-g).toFixed(2));
+    var remBuy=parseFloat((remGov/0.6).toFixed(2));
+    document.getElementById('remain-grid').style.display='grid';
+    var rv1=document.getElementById('remain-gov');
+    var rv2=document.getElementById('remain-buy');
+    rv1.textContent=fmt(remGov);
+    rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
+    rv2.textContent=fmt(remBuy);
+    rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
   } else {
-    document.getElementById('remain-box').style.display='none';
+    document.getElementById('remain-grid').style.display='none';
   }
   var msg='';
   if(b===0){
