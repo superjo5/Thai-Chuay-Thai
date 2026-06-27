@@ -10,70 +10,95 @@
 <title>ไทยช่วยไทย พลัส</title>
 <link rel="manifest" href="manifest.json">
 <style>
+  :root{
+    --bg:#f4f6f4;--card:#fff;--card-shadow:0 1px 8px rgba(0,0,0,.06);
+    --text:#222;--text2:#555;--muted:#888;--border:#eee;--input-bg:#f7f7f7;
+    --rem-bg:#f7f7f7;--rem-border:#eee;--modal-bg:#fff;--modal-border:#f5f5f5;
+    --lbl:0.6875rem;--body:0.8125rem;--inp:clamp(1.25rem,4vw,1.75rem);
+    --amt:clamp(1.25rem,4vw,2rem);--rval:clamp(1rem,3.5vw,1.25rem);--max-val:clamp(1.125rem,4vw,1.5rem);
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --bg:#0f0f0f;--card:#1c1c1e;--card-shadow:0 1px 8px rgba(0,0,0,.4);
+      --text:#f2f2f7;--text2:#aeaeb2;--muted:#636366;--border:#2c2c2e;--input-bg:#2c2c2e;
+      --rem-bg:#2c2c2e;--rem-border:#3a3a3c;--modal-bg:#1c1c1e;--modal-border:#2c2c2e;
+    }
+  }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{min-height:100%;background:#f4f6f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  html{font-size:1rem}
+  html,body{min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text)}
   body{display:flex;justify-content:center;padding:12px 12px 32px}
   .app{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px}
   .topbar{background:#1D9E75;border-radius:14px;padding:11px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
-  .topbar h1{font-size:clamp(14px,3vw,18px);font-weight:600}
+  .topbar h1{font-size:clamp(0.875rem,3vw,1.125rem);font-weight:600}
   .topbar-right{display:flex;align-items:center;gap:8px}
-  .badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .badge{font-size:0.6875rem;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:20px;white-space:nowrap}
   .info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .info-btn:active{background:rgba(255,255,255,.4)}
   .main-grid{display:grid;grid-template-columns:1fr;gap:10px}
   @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
   .inputs-col,.results-col{display:flex;flex-direction:column;gap:10px}
-  .card{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-  .lbl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+  .card{background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--card-shadow)}
+  .lbl{font-size:var(--lbl);font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
   .inp-row{display:flex;align-items:center;gap:6px}
-  .baht{font-size:18px;font-weight:600;color:#bbb;flex-shrink:0}
-  input[type=text]{flex:1;min-width:0;font-size:clamp(20px,4vw,28px);font-weight:700;color:#222;background:#f7f7f7;border:2px solid #eee;border-radius:10px;padding:8px 12px;outline:none;width:100%}
-  input[type=text]:focus{border-color:#1D9E75;background:#f0fbf7}
-  .bbar-bg{height:6px;border-radius:3px;background:#eee;overflow:hidden;margin:8px 0 4px}
+  .baht{font-size:1.125rem;font-weight:600;color:var(--muted);flex-shrink:0}
+  input[type=text]{flex:1;min-width:0;font-size:var(--inp);font-weight:700;color:var(--text);background:var(--input-bg);border:2px solid var(--border);border-radius:10px;padding:8px 12px;outline:none;width:100%;-webkit-appearance:none}
+  input[type=text]:focus{border-color:#1D9E75;background:var(--input-bg)}
+  .bbar-bg{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:8px 0 4px}
   .bbar-fill{height:100%;border-radius:3px;background:#1D9E75;transition:width .2s}
   .bbar-fill.low{background:#E07B00}
   .bbar-fill.empty{background:#E24B4A}
-  .blabels{display:flex;justify-content:space-between;font-size:10px;color:#aaa}
-  .max-box{background:#e8f5f1;border:1px solid #9FE1CB;border-radius:10px;padding:10px 12px;margin-top:10px}
-  .max-box-label{font-size:11px;color:#085041;font-weight:600;margin-bottom:4px}
-  .max-box-val{font-size:clamp(18px,4vw,24px);font-weight:700;color:#0F6E56;line-height:1.1}
-  .max-box-sub{font-size:11px;color:#3C8C6A;margin-top:2px}
-  .split-bar{height:10px;border-radius:5px;background:#eee;display:flex;overflow:hidden;margin-bottom:8px}
+  .blabels{display:flex;justify-content:space-between;font-size:0.625rem;color:var(--muted)}
+  .max-box{background:#0F6E5618;border:1px solid #9FE1CB44;border-radius:10px;padding:10px 12px;margin-top:10px}
+  .max-box-label{font-size:var(--lbl);color:#3C8C6A;font-weight:600;margin-bottom:4px}
+  .max-box-val{font-size:var(--max-val);font-weight:700;color:#0F6E56;line-height:1.1}
+  .max-box-sub{font-size:0.6875rem;color:#3C8C6A;margin-top:2px}
+  @media(prefers-color-scheme:dark){
+    .max-box{background:#0F6E5630;border-color:#9FE1CB33}
+    .rc.gov{background:#0F6E5620;border-color:#9FE1CB33}
+    .rc.you{background:#185FA520;border-color:#B5D4F433}
+  }
+  .split-bar{height:10px;border-radius:5px;background:var(--border);display:flex;overflow:hidden;margin-bottom:8px}
   .bar-g{background:#1D9E75;transition:width .2s;min-width:0}
   .bar-b{background:#378ADD;transition:width .2s;flex:1}
-  .legend{display:flex;gap:10px;font-size:11px;color:#888;margin-bottom:12px}
+  .legend{display:flex;gap:10px;font-size:var(--lbl);color:var(--text2);margin-bottom:12px}
   .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
   .res-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .rc{border-radius:12px;padding:12px 14px}
   .rc.gov{background:#e8f5f1;border:1px solid #9FE1CB}
   .rc.you{background:#e6f1fb;border:1px solid #B5D4F4}
-  .rc-label{font-size:11px;font-weight:600;margin-bottom:5px}
+  .rc-label{font-size:var(--lbl);font-weight:600;margin-bottom:5px}
   .rc-label.green{color:#085041}
   .rc-label.blue{color:#042C53}
-  .rc-amount{font-size:clamp(20px,4vw,32px);font-weight:700;line-height:1;word-break:break-all}
+  @media(prefers-color-scheme:dark){.rc-label.green{color:#4CD9A0}.rc-label.blue{color:#7AB8F5}}
+  .rc-amount{font-size:var(--amt);font-weight:700;line-height:1;word-break:break-all}
   .rc-amount.green{color:#0F6E56}
   .rc-amount.blue{color:#185FA5}
-  .rc-sub{font-size:11px;margin-top:3px}
+  @media(prefers-color-scheme:dark){.rc-amount.green{color:#34C98A}.rc-amount.blue{color:#5AA4E8}}
+  .rc-sub{font-size:var(--lbl);margin-top:3px}
   .rc-sub.green{color:#3C8C6A}
   .rc-sub.blue{color:#185FA5}
+  @media(prefers-color-scheme:dark){.rc-sub.green{color:#4CD9A0}.rc-sub.blue{color:#7AB8F5}}
   .remain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
-  .ritem{background:#f7f7f7;border:1px solid #eee;border-radius:10px;padding:10px 12px}
-  .ritem-label{font-size:10px;color:#888;margin-bottom:4px;line-height:1.4}
-  .ritem-val{font-size:clamp(16px,4vw,20px);font-weight:700}
+  .ritem{background:var(--rem-bg);border:1px solid var(--rem-border);border-radius:10px;padding:10px 12px}
+  .ritem-label{font-size:0.625rem;color:var(--muted);margin-bottom:4px;line-height:1.4}
+  .ritem-val{font-size:var(--rval);font-weight:700}
   .ritem-val.ok{color:#0F6E56}
   .ritem-val.low{color:#E07B00}
   .ritem-val.empty{color:#E24B4A}
-  .alert{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px}
-  .alert.warn{background:#FFF8E1;color:#9A6500}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
-  .modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-  .modal h3{font-size:16px;font-weight:700;color:#222;margin-bottom:14px}
-  .modal-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5}
+  @media(prefers-color-scheme:dark){.ritem-val.ok{color:#34C98A}}
+  .alert{border-radius:10px;padding:10px 12px;font-size:var(--body);line-height:1.5;margin-top:10px}
+  .alert.warn{background:#FFF8E122;color:#FFBA00}
+  @media(prefers-color-scheme:dark){.alert.warn{background:#3A2E0A;color:#FFBA00}}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal{background:var(--modal-bg);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+  .modal h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px}
+  .modal-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--modal-border)}
   .modal-row:last-of-type{border-bottom:none;padding-bottom:0}
-  .modal-icon{font-size:18px;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
-  .modal-text .mt{font-size:13px;color:#333;font-weight:600}
-  .modal-text .ms{font-size:12px;color:#888;margin-top:1px}
-  .modal-close{width:100%;margin-top:16px;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}
+  .modal-icon{font-size:1.125rem;flex-shrink:0;width:26px;text-align:center;margin-top:1px}
+  .modal-text .mt{font-size:var(--body);color:var(--text);font-weight:600}
+  .modal-text .ms{font-size:0.75rem;color:var(--text2);margin-top:1px}
+  .modal-close{width:100%;margin-top:16px;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:var(--body);font-weight:600;cursor:pointer}
   .modal-close:active{background:#0F6E56}
 </style>
 </head>
@@ -215,19 +240,15 @@ function calc(){
   document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
   document.getElementById('bg').style.width=gp+'%';
   document.getElementById('bb').style.width=yp+'%';
-  if(hasBudget){
-    var remGov=parseFloat((b-g).toFixed(2));
-    var remBuy=parseFloat((remGov/0.6).toFixed(2));
-    document.getElementById('remain-grid').style.display='grid';
-    var rv1=document.getElementById('remain-gov');
-    var rv2=document.getElementById('remain-buy');
-    rv1.textContent=fmt(remGov);
-    rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
-    rv2.textContent=fmt(remBuy);
-    rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
-  } else {
-    document.getElementById('remain-grid').style.display='none';
-  }
+  var remGov=parseFloat((b-g).toFixed(2));
+  var remBuy=parseFloat((remGov/0.6).toFixed(2));
+  document.getElementById('remain-grid').style.display='grid';
+  var rv1=document.getElementById('remain-gov');
+  var rv2=document.getElementById('remain-buy');
+  rv1.textContent=fmt(remGov);
+  rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
+  rv2.textContent=fmt(remBuy);
+  rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
   var msg='';
   if(b===0){
     msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';
