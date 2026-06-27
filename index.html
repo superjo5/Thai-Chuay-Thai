@@ -65,34 +65,45 @@ input:checked+.theme-track:before{transform:translateX(20px)}
   .main-grid{grid-template-columns:1fr 1fr;align-items:start}
 }
 
-/* แท็บเล็ตแนวตั้ง: 1 คอลัมน์ เต็มหน้าจอ font ใหญ่ */
+/* แท็บเล็ตแนวตั้ง: font ใหญ่ขึ้นมาก ใช้ vw เป็นหลัก */
 @media(min-width:600px) and (orientation:portrait){
-  .card{padding:clamp(18px,2.5vw,28px) clamp(20px,2.8vw,30px)}
-  .lbl{font-size:clamp(.8rem,1.6vw,1rem)}
-  .baht{font-size:clamp(1.6rem,3.5vw,2.4rem)}
-  input[type=text]{font-size:clamp(2.4rem,6vw,4rem);padding:12px 18px;border-radius:16px}
-  .rc{padding:clamp(16px,2.5vw,24px) clamp(18px,2.8vw,26px)}
-  .rc-label{font-size:clamp(.85rem,1.6vw,1.1rem);margin-bottom:8px}
-  .rc-amount{font-size:clamp(2.2rem,5.5vw,3.5rem)}
-  .rc-sub{font-size:clamp(.8rem,1.5vw,1rem)}
-  .split-bar{height:clamp(12px,1.8vw,18px);margin-bottom:12px}
-  .legend{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:16px;gap:16px}
-  .dot{width:10px;height:10px}
-  .ritem{padding:clamp(12px,2vw,20px) clamp(14px,2.2vw,22px)}
-  .ritem-label{font-size:clamp(.75rem,1.4vw,.95rem);margin-bottom:6px}
-  .ritem-val{font-size:clamp(1.4rem,3.5vw,2.2rem)}
-  .remain-grid{gap:clamp(10px,1.8vw,16px);margin-top:clamp(12px,2vw,18px)}
-  .max-box{padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,22px)}
-  .max-box-label{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:6px}
-  .max-box-val{font-size:clamp(1.8rem,4vw,2.8rem)}
-  .max-box-sub{font-size:clamp(.8rem,1.5vw,1rem);margin-top:4px}
-  .extra-box{padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,22px)}
-  .extra-box-label{font-size:clamp(.8rem,1.5vw,1rem);margin-bottom:8px}
-  .extra-desc{font-size:clamp(.85rem,1.6vw,1.05rem)}
-  .extra-val{font-size:clamp(1.2rem,3vw,1.8rem)}
-  .bbar-bg{height:10px;margin:12px 0 6px}
-  .blabels{font-size:clamp(.7rem,1.3vw,.9rem)}
-  .alert{font-size:clamp(.85rem,1.6vw,1.05rem);padding:14px 16px}
+  .app{gap:2vw}
+  .card{padding:3vw 3.5vw;border-radius:3vw}
+  .lbl{font-size:1.8vw;margin-bottom:1.5vw}
+  .baht{font-size:5vw}
+  input[type=text]{font-size:8vw;padding:1.8vw 2.5vw;border-radius:2vw}
+  .inp-row{gap:1.5vw}
+  .rc{padding:2.5vw 3vw;border-radius:2.5vw}
+  .rc-label{font-size:1.8vw;margin-bottom:1.2vw}
+  .rc-amount{font-size:7vw}
+  .rc-sub{font-size:1.7vw;margin-top:.8vw}
+  .split-bar{height:2vw;margin-bottom:1.5vw;border-radius:1vw}
+  .legend{font-size:1.8vw;margin-bottom:2vw;gap:2vw}
+  .dot{width:1.4vw;height:1.4vw}
+  .res-row{gap:2vw}
+  .ritem{padding:2vw 2.5vw;border-radius:2vw}
+  .ritem-label{font-size:1.6vw;margin-bottom:1vw}
+  .ritem-val{font-size:4.5vw}
+  .remain-grid{gap:2vw;margin-top:2vw}
+  .max-box{padding:2.5vw 3vw;border-radius:2vw;margin-top:2vw}
+  .max-box-label{font-size:1.8vw;margin-bottom:1vw}
+  .max-box-val{font-size:5.5vw}
+  .max-box-sub{font-size:1.7vw;margin-top:.8vw}
+  .extra-box{padding:2.5vw 3vw;border-radius:2vw;margin-top:2vw}
+  .extra-box-label{font-size:1.8vw;margin-bottom:1.2vw}
+  .extra-desc{font-size:1.9vw}
+  .extra-val{font-size:4vw}
+  .bbar-bg{height:1.4vw;margin:1.5vw 0 .8vw}
+  .blabels{font-size:1.5vw}
+  .alert{font-size:1.8vw;padding:2vw 2.5vw;border-radius:2vw;margin-top:2vw}
+  .topbar{padding:1.5vw 2.5vw;border-radius:2.5vw}
+  .topbar h1{font-size:3vw}
+  .badge{font-size:1.6vw;padding:.5vw 1.5vw}
+  .theme-switch{width:7vw;height:3.8vw}
+  .theme-track:before{width:3vw;height:3vw;top:.4vw;left:.4vw}
+  .theme-icons{font-size:1.8vw;padding:0 .6vw}
+  input:checked+.theme-track:before{transform:translateX(3.2vw)}
+  .info-btn{font-size:1.6vw;padding:.6vw 1.5vw}
 }
 
 /* มือถือปกติ */
