@@ -45,18 +45,18 @@
 html,body{min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);transition:background .2s,color .2s}
 body{display:flex;justify-content:center;padding:12px 12px 32px}
 .app{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
-.topbar{background:#1D9E75;border-radius:clamp(12px,2vw,16px);padding:clamp(10px,1.5vw,14px) clamp(14px,2vw,20px);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.topbar h1{font-size:clamp(.85rem,2.5vw,1.4rem);font-weight:600;white-space:nowrap;flex-shrink:1;min-width:0}
-.topbar-right{display:flex;align-items:center;gap:clamp(6px,1vw,10px);flex-shrink:0}
-.badge{font-size:clamp(.7rem,1.5vw,1rem);background:rgba(255,255,255,.2);padding:clamp(3px,.5vw,5px) clamp(8px,1.2vw,14px);border-radius:20px;white-space:nowrap}
-.theme-switch{position:relative;width:52px;height:28px;flex-shrink:0;cursor:pointer}
+.topbar{background:#1D9E75;border-radius:clamp(12px,2vw,16px);padding:10px 14px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.topbar h1{font-size:clamp(.82rem,3.8vw,1.2rem);font-weight:600;white-space:nowrap;flex-shrink:1;min-width:0}
+.topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.badge{font-size:.7rem;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.theme-switch{position:relative;width:44px;height:24px;flex-shrink:0;cursor:pointer}
 .theme-switch input{opacity:0;width:0;height:0;position:absolute}
-.theme-track{position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:14px;transition:background .3s}
-.theme-track:before{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center}
-.theme-icons{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 5px;font-size:13px;pointer-events:none}
+.theme-track{position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:12px;transition:background .3s}
+.theme-track:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.theme-icons{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font-size:11px;pointer-events:none}
 input:checked+.theme-track{background:rgba(0,0,0,.35)}
-input:checked+.theme-track:before{transform:translateX(24px)}
-.info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:20px;padding:clamp(4px,.6vw,7px) clamp(10px,1.5vw,16px);font-size:clamp(.7rem,1.5vw,.95rem);font-weight:600;cursor:pointer;white-space:nowrap}
+input:checked+.theme-track:before{transform:translateX(20px)}
+.info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:20px;padding:4px 10px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .info-btn:active{background:rgba(255,255,255,.4)}
 .main-grid{display:grid;grid-template-columns:1fr;gap:clamp(8px,1.5vw,14px)}
 @media(min-width:600px){.main-grid{grid-template-columns:1fr 1fr;align-items:start}}
@@ -136,7 +136,7 @@ input[type=text]:focus{border-color:#1D9E75}
 <body>
 <div class="app">
   <div class="topbar">
-    <h1>ไทยช่วยไทย พลัส 💚</h1>
+    <h1>ไทยช่วยไทย พลัส</h1>
     <div class="topbar-right">
       <span class="badge">60 / 40</span>
       <label class="theme-switch" aria-label="เปลี่ยนธีม">
