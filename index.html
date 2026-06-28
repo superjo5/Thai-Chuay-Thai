@@ -66,27 +66,31 @@ input:checked+.theme-track:before{transform:translateX(20px)}
 }
 
 /* JS จะ inject --fs-* variables ลงใน :root ตามขนาดจอจริง */
-.lbl{font-size:var(--fs-label,13px)}
-.baht{font-size:var(--fs-baht,22px)}
-input[type=text]{font-size:var(--fs-input,32px)}
-.rc-label{font-size:var(--fs-label,13px)}
-.rc-amount{font-size:var(--fs-amount,30px)}
-.rc-sub{font-size:var(--fs-sub,12px)}
-.ritem-label{font-size:var(--fs-sub,12px)}
-.ritem-val{font-size:var(--fs-rval,24px)}
-.max-box-label{font-size:var(--fs-label,13px)}
-.max-box-val{font-size:var(--fs-mval,26px)}
-.max-box-sub{font-size:var(--fs-sub,12px)}
-.extra-box-label{font-size:var(--fs-label,13px)}
-.extra-desc{font-size:var(--fs-sub,12px)}
-.extra-val{font-size:var(--fs-eval,22px)}
-.blabels{font-size:var(--fs-tiny,10px)}
-.alert{font-size:var(--fs-sub,12px)}
-.legend{font-size:var(--fs-sub,12px)}
-.topbar h1{font-size:var(--fs-title,15px)}
-.badge{font-size:var(--fs-badge,11px)}
-.info-btn{font-size:var(--fs-badge,11px)}
-.theme-icons{font-size:var(--fs-badge,11px)}
+/* font sizes ตั้งต้น */
+.lbl{font-size:11px}
+.baht{font-size:18px}
+input[type=text]{font-size:clamp(1.5rem,4vw,2rem)}
+.rc-label{font-size:11px}
+.rc-amount{font-size:clamp(1.4rem,4vw,2rem)}
+.rc-sub{font-size:11px}
+.ritem-label{font-size:10px}
+.ritem-val{font-size:clamp(1rem,3.5vw,1.4rem)}
+.max-box-label{font-size:11px}
+.max-box-val{font-size:clamp(1.1rem,3.8vw,1.6rem)}
+.max-box-sub{font-size:11px}
+.extra-box-label{font-size:11px}
+.extra-desc{font-size:11px}
+.extra-val{font-size:clamp(1rem,3.5vw,1.4rem)}
+.blabels{font-size:10px}
+.alert{font-size:11px}
+.legend{font-size:11px}
+.topbar h1{font-size:clamp(.9rem,3vw,1.1rem)}
+.badge{font-size:11px}
+.info-btn{font-size:11px}
+.theme-icons{font-size:11px}
+
+/* zoom wrapper */
+.zoom-wrap{width:100%;transform-origin:top center}
 
 /* แนวนอน: 2 คอลัมน์ */
 @media(orientation:landscape) and (min-width:700px){
@@ -143,11 +147,6 @@ input[type=text]:focus{border-color:#1D9E75}
 .extra-val{font-size:clamp(.95rem,2.2vw,1.4rem);font-weight:700;color:var(--warn-text)}
 .alert{border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,14px) clamp(11px,1.6vw,16px);font-size:clamp(.75rem,1.4vw,.9rem);line-height:1.5;margin-top:clamp(8px,1.4vw,13px)}
 .alert.warn{background:var(--warn-bg);color:var(--warn-text)}
-.size-bar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:8px 12px;box-shadow:var(--shadow)}
-.size-bar span{font-size:13px;color:var(--muted);flex-shrink:0}
-.size-btn{background:var(--rem-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;width:36px;height:36px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.size-btn:active{background:var(--border)}
-.size-display{font-size:13px;color:var(--text);min-width:32px;text-align:center;font-weight:600}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal{background:var(--modal-bg);border-radius:clamp(16px,2.5vw,24px);padding:clamp(16px,2.5vw,26px);width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.3);transition:background .2s}
 .modal h3{font-size:clamp(.9rem,1.8vw,1.15rem);font-weight:700;color:var(--text);margin-bottom:clamp(12px,2vw,18px)}
@@ -161,11 +160,14 @@ input[type=text]:focus{border-color:#1D9E75}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app"><div class="zoom-wrap" id="zoom-wrap">
   <div class="topbar">
     <h1>ไทยช่วยไทย พลัส</h1>
     <div class="topbar-right">
       <span class="badge">60 / 40</span>
+      <button onclick="changeSize(-1)" style="background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:8px;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">−</button>
+      <span id="size-display" style="font-size:11px;color:#fff;min-width:28px;text-align:center;flex-shrink:0">100%</span>
+      <button onclick="changeSize(1)" style="background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:8px;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">+</button>
       <label class="theme-switch" aria-label="เปลี่ยนธีม">
         <input type="checkbox" id="theme-chk" onchange="toggleTheme()">
         <div class="theme-track"></div>
@@ -175,12 +177,6 @@ input[type=text]:focus{border-color:#1D9E75}
     </div>
   </div>
 
-  <div class="size-bar">
-    <span>ขนาดตัวอักษร</span>
-    <button class="size-btn" onclick="changeSize(-1)">−</button>
-    <span class="size-display" id="size-display">100%</span>
-    <button class="size-btn" onclick="changeSize(1)">+</button>
-  </div>
   <div class="main-grid">
     <div class="inputs-col">
       <div class="card">
@@ -255,6 +251,7 @@ input[type=text]:focus{border-color:#1D9E75}
   </div>
 </div>
 
+</div><!-- /zoom-wrap -->
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
     <h3>ข้อมูลโครงการ ไทยช่วยไทย พลัส</h3>
@@ -270,34 +267,24 @@ input[type=text]:focus{border-color:#1D9E75}
 </div>
 
 <script>
-// ระบบปรับขนาดตัวอักษร
-var sizeStep=parseInt(localStorage.getItem('fontSize')||'0');
-var BASE={
-  label:14,baht:24,input:36,amount:34,sub:13,rval:28,mval:30,eval:26,tiny:11,title:17,badge:12
-};
-function applySize(){
-  var r=document.documentElement.style;
-  var pct=[75,85,100,115,130,150,175,200][sizeStep+3]||100;
-  var s=pct/100;
-  r.setProperty('--fs-label', Math.round(BASE.label*s)+'px');
-  r.setProperty('--fs-baht',  Math.round(BASE.baht*s)+'px');
-  r.setProperty('--fs-input', Math.round(BASE.input*s)+'px');
-  r.setProperty('--fs-amount',Math.round(BASE.amount*s)+'px');
-  r.setProperty('--fs-sub',   Math.round(BASE.sub*s)+'px');
-  r.setProperty('--fs-rval',  Math.round(BASE.rval*s)+'px');
-  r.setProperty('--fs-mval',  Math.round(BASE.mval*s)+'px');
-  r.setProperty('--fs-eval',  Math.round(BASE.eval*s)+'px');
-  r.setProperty('--fs-tiny',  Math.round(BASE.tiny*s)+'px');
-  r.setProperty('--fs-title', Math.round(BASE.title*s)+'px');
-  r.setProperty('--fs-badge', Math.round(BASE.badge*s)+'px');
-  document.getElementById('size-display').textContent=pct+'%';
-  localStorage.setItem('fontSize',sizeStep);
+// ระบบ zoom
+var zoomLevels=[0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.35,1.5,1.75,2.0];
+var zoomIdx=parseInt(localStorage.getItem('zoomIdx')||'4');
+function applyZoom(){
+  var z=zoomLevels[zoomIdx];
+  var el=document.getElementById('zoom-wrap');
+  el.style.transform='scale('+z+')';
+  el.style.width=(100/z)+'%';
+  el.style.marginBottom=((z-1)*el.offsetHeight*0.5)+'px';
+  document.getElementById('size-display').textContent=Math.round(z*100)+'%';
+  localStorage.setItem('zoomIdx',zoomIdx);
 }
 function changeSize(d){
-  sizeStep=Math.max(-3,Math.min(4,sizeStep+d));
-  applySize();
+  zoomIdx=Math.max(0,Math.min(zoomLevels.length-1,zoomIdx+d));
+  applyZoom();
 }
-applySize();
+window.addEventListener('load',applyZoom);
+window.addEventListener('resize',applyZoom);
 
 var saved=localStorage.getItem('theme');
 var sysDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
