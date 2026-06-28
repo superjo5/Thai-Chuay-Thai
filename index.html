@@ -49,9 +49,9 @@ body{display:flex;justify-content:center;padding:12px 12px 32px}
 .topbar h1{font-size:clamp(.82rem,3.8vw,1.2rem);font-weight:600;white-space:nowrap;flex-shrink:1;min-width:0}
 .topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .badge{font-size:.7rem;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;white-space:nowrap}
-.theme-switch{position:relative;width:44px;height:24px;flex-shrink:0;cursor:pointer}
+.theme-switch{position:relative;width:44px;height:24px;flex-shrink:0;cursor:pointer;display:inline-flex;align-items:center}
 .theme-switch input{opacity:0;width:0;height:0;position:absolute}
-.theme-track{position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:12px;transition:background .3s}
+.theme-track{position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:12px;transition:background .3s;display:block}
 .theme-track:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1)}
 .theme-icons{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font-size:11px;pointer-events:none}
 input:checked+.theme-track{background:rgba(0,0,0,.35)}
@@ -143,6 +143,11 @@ input[type=text]:focus{border-color:#1D9E75}
 .extra-val{font-size:clamp(.95rem,2.2vw,1.4rem);font-weight:700;color:var(--warn-text)}
 .alert{border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,14px) clamp(11px,1.6vw,16px);font-size:clamp(.75rem,1.4vw,.9rem);line-height:1.5;margin-top:clamp(8px,1.4vw,13px)}
 .alert.warn{background:var(--warn-bg);color:var(--warn-text)}
+.size-bar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:8px 12px;box-shadow:var(--shadow)}
+.size-bar span{font-size:13px;color:var(--muted);flex-shrink:0}
+.size-btn{background:var(--rem-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;width:36px;height:36px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.size-btn:active{background:var(--border)}
+.size-display{font-size:13px;color:var(--text);min-width:32px;text-align:center;font-weight:600}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal{background:var(--modal-bg);border-radius:clamp(16px,2.5vw,24px);padding:clamp(16px,2.5vw,26px);width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.3);transition:background .2s}
 .modal h3{font-size:clamp(.9rem,1.8vw,1.15rem);font-weight:700;color:var(--text);margin-bottom:clamp(12px,2vw,18px)}
@@ -170,6 +175,12 @@ input[type=text]:focus{border-color:#1D9E75}
     </div>
   </div>
 
+  <div class="size-bar">
+    <span>ขนาดตัวอักษร</span>
+    <button class="size-btn" onclick="changeSize(-1)">−</button>
+    <span class="size-display" id="size-display">100%</span>
+    <button class="size-btn" onclick="changeSize(1)">+</button>
+  </div>
   <div class="main-grid">
     <div class="inputs-col">
       <div class="card">
@@ -259,70 +270,34 @@ input[type=text]:focus{border-color:#1D9E75}
 </div>
 
 <script>
-function setFontScale(){
-  var w=window.innerWidth, h=window.innerHeight;
-  var isTabletPortrait = w>=600 && w<=1200 && h>w;
-  var isPhone = w<600;
-  var isLandscape = w>h && w>=700;
-  var isDesktop = w>=1100;
+// ระบบปรับขนาดตัวอักษร
+var sizeStep=parseInt(localStorage.getItem('fontSize')||'0');
+var BASE={
+  label:14,baht:24,input:36,amount:34,sub:13,rval:28,mval:30,eval:26,tiny:11,title:17,badge:12
+};
+function applySize(){
   var r=document.documentElement.style;
-  if(isTabletPortrait){
-    // แท็บเล็ตแนวตั้ง: scale ตาม w จริงๆ
-    var s=w/820; // base = 820px
-    r.setProperty('--fs-label', Math.round(22*s)+'px');
-    r.setProperty('--fs-baht',  Math.round(40*s)+'px');
-    r.setProperty('--fs-input', Math.round(52*s)+'px');
-    r.setProperty('--fs-amount',Math.round(52*s)+'px');
-    r.setProperty('--fs-sub',   Math.round(18*s)+'px');
-    r.setProperty('--fs-rval',  Math.round(40*s)+'px');
-    r.setProperty('--fs-mval',  Math.round(46*s)+'px');
-    r.setProperty('--fs-eval',  Math.round(36*s)+'px');
-    r.setProperty('--fs-tiny',  Math.round(15*s)+'px');
-    r.setProperty('--fs-title', Math.round(28*s)+'px');
-    r.setProperty('--fs-badge', Math.round(18*s)+'px');
-  } else if(isPhone){
-    var s=w/390; // base = 390px (iPhone)
-    r.setProperty('--fs-label', Math.round(14*s)+'px');
-    r.setProperty('--fs-baht',  Math.round(24*s)+'px');
-    r.setProperty('--fs-input', Math.round(36*s)+'px');
-    r.setProperty('--fs-amount',Math.round(34*s)+'px');
-    r.setProperty('--fs-sub',   Math.round(13*s)+'px');
-    r.setProperty('--fs-rval',  Math.round(28*s)+'px');
-    r.setProperty('--fs-mval',  Math.round(30*s)+'px');
-    r.setProperty('--fs-eval',  Math.round(26*s)+'px');
-    r.setProperty('--fs-tiny',  Math.round(11*s)+'px');
-    r.setProperty('--fs-title', Math.round(17*s)+'px');
-    r.setProperty('--fs-badge', Math.round(12*s)+'px');
-  } else if(isDesktop){
-    r.setProperty('--fs-label', '16px');
-    r.setProperty('--fs-baht',  '26px');
-    r.setProperty('--fs-input', '38px');
-    r.setProperty('--fs-amount','36px');
-    r.setProperty('--fs-sub',   '14px');
-    r.setProperty('--fs-rval',  '30px');
-    r.setProperty('--fs-mval',  '32px');
-    r.setProperty('--fs-eval',  '28px');
-    r.setProperty('--fs-tiny',  '12px');
-    r.setProperty('--fs-title', '20px');
-    r.setProperty('--fs-badge', '13px');
-  } else {
-    // landscape tablet
-    r.setProperty('--fs-label', '14px');
-    r.setProperty('--fs-baht',  '22px');
-    r.setProperty('--fs-input', '32px');
-    r.setProperty('--fs-amount','30px');
-    r.setProperty('--fs-sub',   '12px');
-    r.setProperty('--fs-rval',  '26px');
-    r.setProperty('--fs-mval',  '28px');
-    r.setProperty('--fs-eval',  '24px');
-    r.setProperty('--fs-tiny',  '10px');
-    r.setProperty('--fs-title', '16px');
-    r.setProperty('--fs-badge', '11px');
-  }
+  var pct=[75,85,100,115,130,150,175,200][sizeStep+3]||100;
+  var s=pct/100;
+  r.setProperty('--fs-label', Math.round(BASE.label*s)+'px');
+  r.setProperty('--fs-baht',  Math.round(BASE.baht*s)+'px');
+  r.setProperty('--fs-input', Math.round(BASE.input*s)+'px');
+  r.setProperty('--fs-amount',Math.round(BASE.amount*s)+'px');
+  r.setProperty('--fs-sub',   Math.round(BASE.sub*s)+'px');
+  r.setProperty('--fs-rval',  Math.round(BASE.rval*s)+'px');
+  r.setProperty('--fs-mval',  Math.round(BASE.mval*s)+'px');
+  r.setProperty('--fs-eval',  Math.round(BASE.eval*s)+'px');
+  r.setProperty('--fs-tiny',  Math.round(BASE.tiny*s)+'px');
+  r.setProperty('--fs-title', Math.round(BASE.title*s)+'px');
+  r.setProperty('--fs-badge', Math.round(BASE.badge*s)+'px');
+  document.getElementById('size-display').textContent=pct+'%';
+  localStorage.setItem('fontSize',sizeStep);
 }
-setFontScale();
-window.addEventListener('resize', setFontScale);
-window.addEventListener('orientationchange', function(){setTimeout(setFontScale,100);});
+function changeSize(d){
+  sizeStep=Math.max(-3,Math.min(4,sizeStep+d));
+  applySize();
+}
+applySize();
 
 var saved=localStorage.getItem('theme');
 var sysDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
