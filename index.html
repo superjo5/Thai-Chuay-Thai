@@ -41,134 +41,352 @@
   --remain-ok:#34C98A;--remain-low:#FFBA00;--remain-empty:#FF6B6B;
   --warn-bg:#3A2E0A;--warn-text:#FFBA00;
 }
+
+/* ===== BASE ===== */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);transition:background .2s,color .2s}
-body{display:flex;justify-content:center;padding:0}
-.app{width:100%;max-width:1200px;overflow-x:hidden}
-.topbar{background:#1D9E75;border-radius:clamp(12px,2vw,16px);padding:10px 14px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:6px}
-.topbar h1{font-size:clamp(.82rem,3.8vw,1.2rem);font-weight:600;white-space:nowrap;flex-shrink:1;min-width:0}
-.topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.badge{font-size:.7rem;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;white-space:nowrap}
-.theme-switch{position:relative;width:44px;height:24px;flex-shrink:0;cursor:pointer;display:inline-flex;align-items:center}
+html,body{
+  min-height:100%;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--text);
+  transition:background .2s,color .2s;
+}
+body{
+  display:flex;
+  justify-content:center;
+  /* ใช้ padding แทน zoom — ขยับเนื้อหาห่างขอบ */
+  padding:clamp(8px,2vw,20px) clamp(8px,2vw,20px) clamp(20px,4vw,40px);
+}
+
+/* ===== APP SHELL ===== */
+.app{
+  width:100%;
+  max-width:900px;
+  display:flex;
+  flex-direction:column;
+  gap:clamp(8px,2vw,16px);
+}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  background:#1D9E75;
+  border-radius:clamp(12px,2.5vw,18px);
+  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,20px);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:clamp(6px,1.5vw,12px);
+  flex-wrap:nowrap;
+}
+.topbar h1{
+  font-size:clamp(1rem,4vw,1.35rem);
+  font-weight:700;
+  white-space:nowrap;
+  flex-shrink:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:clamp(5px,1.2vw,10px);
+  flex-shrink:0;
+}
+.badge{
+  font-size:clamp(.7rem,2.5vw,.85rem);
+  background:rgba(255,255,255,.2);
+  padding:clamp(2px,.5vw,4px) clamp(6px,1.5vw,10px);
+  border-radius:20px;
+  white-space:nowrap;
+}
+.theme-switch{
+  position:relative;
+  width:clamp(38px,9vw,48px);
+  height:clamp(22px,5vw,26px);
+  flex-shrink:0;cursor:pointer;
+  display:inline-flex;align-items:center;
+}
 .theme-switch input{opacity:0;width:0;height:0;position:absolute}
-.theme-track{position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:12px;transition:background .3s;display:block}
-.theme-track:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.theme-icons{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font-size:11px;pointer-events:none}
+.theme-track{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.25);
+  border-radius:99px;
+  transition:background .3s;
+}
+.theme-track:before{
+  content:'';position:absolute;
+  width:clamp(16px,4vw,20px);
+  height:clamp(16px,4vw,20px);
+  left:3px;top:50%;transform:translateY(-50%);
+  background:#fff;border-radius:50%;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.theme-icons{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4px;
+  font-size:clamp(9px,2.2vw,12px);
+  pointer-events:none;
+}
 input:checked+.theme-track{background:rgba(0,0,0,.35)}
-input:checked+.theme-track:before{transform:translateX(20px)}
-.info-btn{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:20px;padding:4px 10px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
+input:checked+.theme-track:before{transform:translateY(-50%) translateX(clamp(16px,4vw,22px))}
+.info-btn{
+  background:rgba(255,255,255,.25);border:none;color:#fff;
+  border-radius:20px;
+  padding:clamp(3px,.8vw,6px) clamp(8px,2vw,14px);
+  font-size:clamp(.68rem,2.2vw,.82rem);
+  font-weight:600;cursor:pointer;white-space:nowrap;
+}
 .info-btn:active{background:rgba(255,255,255,.4)}
-.main-grid{display:grid;grid-template-columns:1fr;gap:clamp(8px,1.5vw,14px)}
 
-/* แนวนอนทุกขนาด: 2 คอลัมน์ */
-@media(orientation:landscape) and (min-width:700px){
+/* ===== GRID ===== */
+.main-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(8px,2vw,16px);
+}
+@media(min-width:640px){
   .main-grid{grid-template-columns:1fr 1fr;align-items:start}
 }
-
-/* JS จะ inject --fs-* variables ลงใน :root ตามขนาดจอจริง */
-/* font sizes ตั้งต้น */
-.lbl{font-size:11px}
-.baht{font-size:18px}
-input[type=text]{font-size:clamp(1.5rem,4vw,2rem)}
-.rc-label{font-size:11px}
-.rc-amount{font-size:clamp(1.4rem,4vw,2rem)}
-.rc-sub{font-size:11px}
-.ritem-label{font-size:10px}
-.ritem-val{font-size:clamp(1rem,3.5vw,1.4rem)}
-.max-box-label{font-size:11px}
-.max-box-val{font-size:clamp(1.1rem,3.8vw,1.6rem)}
-.max-box-sub{font-size:11px}
-.extra-box-label{font-size:11px}
-.extra-desc{font-size:11px}
-.extra-val{font-size:clamp(1rem,3.5vw,1.4rem)}
-.blabels{font-size:10px}
-.alert{font-size:11px}
-.legend{font-size:11px}
-.topbar h1{font-size:clamp(.9rem,3vw,1.1rem)}
-.badge{font-size:11px}
-.info-btn{font-size:11px}
-.theme-icons{font-size:11px}
-
-/* zoom wrapper */
-.zoom-wrap{width:100%;transform-origin:top left;display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px);padding:12px 12px 32px}
-
-/* แนวนอน: 2 คอลัมน์ */
-@media(orientation:landscape) and (min-width:700px){
-  .main-grid{grid-template-columns:1fr 1fr;align-items:start}
+.inputs-col,.results-col{
+  display:flex;flex-direction:column;
+  gap:clamp(8px,2vw,16px);
 }
-@media(min-width:1100px){
-  .main-grid{grid-template-columns:1fr 1fr;align-items:start}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card);
+  border-radius:clamp(14px,3vw,22px);
+  padding:clamp(14px,3vw,24px) clamp(14px,3vw,24px);
+  box-shadow:var(--shadow);
+  transition:background .2s;
 }
-.inputs-col,.results-col{display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px)}
-.card{background:var(--card);border-radius:clamp(14px,2vw,20px);padding:clamp(12px,1.8vw,20px) clamp(14px,2vw,22px);box-shadow:var(--shadow);transition:background .2s}
-.lbl{font-size:clamp(.65rem,1.3vw,.85rem);font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:clamp(6px,1vw,10px)}
-.inp-row{display:flex;align-items:center;gap:clamp(5px,1vw,10px)}
-.baht{font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:600;color:var(--muted);flex-shrink:0}
-input[type=text]{flex:1;min-width:0;font-size:clamp(1.5rem,4vw,2.8rem);font-weight:700;color:var(--text);background:var(--input-bg);border:2px solid var(--border);border-radius:clamp(8px,1.5vw,14px);padding:clamp(7px,1vw,12px) clamp(10px,1.5vw,18px);outline:none;width:100%;transition:background .2s,border-color .2s,color .2s}
+.lbl{
+  font-size:clamp(.7rem,2.2vw,.85rem);
+  font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;
+  margin-bottom:clamp(6px,1.5vw,12px);
+}
+.inp-row{display:flex;align-items:center;gap:clamp(6px,1.5vw,12px)}
+.baht{
+  font-size:clamp(1.2rem,4.5vw,2rem);
+  font-weight:700;color:var(--muted);flex-shrink:0;
+}
+input[type=text]{
+  flex:1;min-width:0;
+  font-size:clamp(1.6rem,6vw,3rem);
+  font-weight:700;color:var(--text);
+  background:var(--input-bg);
+  border:2px solid var(--border);
+  border-radius:clamp(8px,2vw,14px);
+  padding:clamp(8px,1.5vw,14px) clamp(10px,2vw,18px);
+  outline:none;width:100%;
+  transition:background .2s,border-color .2s,color .2s;
+}
 input[type=text]:focus{border-color:#1D9E75}
-.bbar-bg{height:clamp(5px,1vw,9px);border-radius:4px;background:var(--border);overflow:hidden;margin:clamp(7px,1.2vw,11px) 0 clamp(4px,.8vw,6px)}
+input[type=text]::placeholder{color:var(--muted)}
+
+/* progress bar */
+.bbar-bg{
+  height:clamp(6px,1.5vw,10px);border-radius:4px;
+  background:var(--border);overflow:hidden;
+  margin:clamp(8px,2vw,14px) 0 clamp(4px,1vw,8px);
+}
 .bbar-fill{height:100%;border-radius:4px;background:#1D9E75;transition:width .2s}
 .bbar-fill.low{background:#E07B00}
 .bbar-fill.empty{background:#E24B4A}
-.blabels{display:flex;justify-content:space-between;font-size:clamp(.6rem,1.1vw,.8rem);color:var(--muted)}
-.max-box{background:var(--max-bg);border:1px solid var(--max-border);border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,15px) clamp(11px,1.6vw,18px);margin-top:clamp(8px,1.2vw,14px)}
-.max-box-label{font-size:clamp(.65rem,1.2vw,.85rem);color:var(--max-label);font-weight:600;margin-bottom:clamp(3px,.6vw,6px)}
-.max-box-val{font-size:clamp(1.2rem,3vw,2rem);font-weight:700;color:var(--max-amt);line-height:1.1}
-.max-box-sub{font-size:clamp(.65rem,1.2vw,.85rem);color:var(--max-sub);margin-top:clamp(2px,.5vw,5px)}
-.split-bar{height:clamp(8px,1.2vw,13px);border-radius:6px;background:var(--border);display:flex;overflow:hidden;margin-bottom:clamp(7px,1vw,11px)}
+.blabels{
+  display:flex;justify-content:space-between;
+  font-size:clamp(.65rem,2vw,.82rem);
+  color:var(--muted);
+}
+
+/* max-box */
+.max-box{
+  background:var(--max-bg);border:1px solid var(--max-border);
+  border-radius:clamp(8px,2vw,14px);
+  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,18px);
+  margin-top:clamp(10px,2vw,16px);
+}
+.max-box-label{
+  font-size:clamp(.68rem,2.2vw,.85rem);
+  color:var(--max-label);font-weight:600;
+  margin-bottom:clamp(4px,1vw,8px);
+}
+.max-box-val{
+  font-size:clamp(1.3rem,4.5vw,2.2rem);
+  font-weight:700;color:var(--max-amt);line-height:1.1;
+}
+.max-box-sub{
+  font-size:clamp(.65rem,2vw,.82rem);
+  color:var(--max-sub);margin-top:clamp(3px,.8vw,6px);
+}
+
+/* split bar + legend */
+.split-bar{
+  height:clamp(10px,2vw,14px);border-radius:6px;
+  background:var(--border);display:flex;overflow:hidden;
+  margin-bottom:clamp(8px,2vw,12px);
+}
 .bar-g{background:#1D9E75;transition:width .2s;min-width:0}
 .bar-b{background:#378ADD;transition:width .2s;flex:1}
-.legend{display:flex;gap:clamp(8px,1.5vw,14px);font-size:clamp(.65rem,1.3vw,.85rem);color:var(--text2);margin-bottom:clamp(9px,1.5vw,14px)}
-.dot{width:clamp(6px,1.1vw,9px);height:clamp(6px,1.1vw,9px);border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
-.res-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(7px,1.2vw,12px)}
-.rc{border-radius:clamp(10px,1.8vw,16px);padding:clamp(11px,1.6vw,18px) clamp(12px,1.8vw,20px);transition:background .2s}
+.legend{
+  display:flex;gap:clamp(10px,3vw,18px);
+  font-size:clamp(.7rem,2.2vw,.88rem);
+  color:var(--text2);
+  margin-bottom:clamp(10px,2.5vw,16px);
+}
+.dot{
+  width:clamp(7px,1.8vw,10px);height:clamp(7px,1.8vw,10px);
+  border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle;
+}
+
+/* result cards */
+.res-row{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(8px,2vw,14px);
+}
+.rc{
+  border-radius:clamp(10px,2.5vw,18px);
+  padding:clamp(12px,2.5vw,20px) clamp(12px,2.5vw,20px);
+  transition:background .2s;
+}
 .rc.gov{background:var(--gov-bg);border:1px solid var(--gov-border)}
 .rc.you{background:var(--you-bg);border:1px solid var(--you-border)}
-.rc-label{font-size:clamp(.65rem,1.3vw,.85rem);font-weight:600;margin-bottom:clamp(4px,.8vw,7px)}
+.rc-label{
+  font-size:clamp(.7rem,2.2vw,.88rem);font-weight:600;
+  margin-bottom:clamp(4px,1vw,8px);
+}
 .rc-label.green{color:var(--gov-label)}
 .rc-label.blue{color:var(--you-label)}
-.rc-amount{font-size:clamp(1.4rem,4vw,2.8rem);font-weight:700;line-height:1;word-break:break-all}
+.rc-amount{
+  font-size:clamp(1.4rem,5.5vw,3rem);
+  font-weight:700;line-height:1;word-break:break-all;
+}
 .rc-amount.green{color:var(--gov-amt)}
 .rc-amount.blue{color:var(--you-amt)}
-.rc-sub{font-size:clamp(.65rem,1.2vw,.85rem);margin-top:clamp(3px,.6vw,5px)}
+.rc-sub{
+  font-size:clamp(.65rem,2vw,.82rem);
+  margin-top:clamp(3px,.8vw,6px);
+}
 .rc-sub.green{color:var(--gov-sub)}
 .rc-sub.blue{color:var(--you-sub)}
-.remain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(7px,1.2vw,12px);margin-top:clamp(8px,1.4vw,13px)}
-.ritem{background:var(--rem-bg);border:1px solid var(--rem-border);border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,14px) clamp(11px,1.6vw,16px);transition:background .2s}
-.ritem-label{font-size:clamp(.6rem,1.1vw,.78rem);color:var(--muted);margin-bottom:clamp(3px,.6vw,6px);line-height:1.4}
-.ritem-val{font-size:clamp(.95rem,2.8vw,1.8rem);font-weight:700}
+
+/* remain grid */
+.remain-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(8px,2vw,14px);margin-top:clamp(10px,2vw,14px);
+}
+.ritem{
+  background:var(--rem-bg);border:1px solid var(--rem-border);
+  border-radius:clamp(8px,2vw,14px);
+  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,18px);
+  transition:background .2s;
+}
+.ritem-label{
+  font-size:clamp(.62rem,2vw,.78rem);
+  color:var(--muted);margin-bottom:clamp(4px,1vw,7px);line-height:1.4;
+}
+.ritem-val{
+  font-size:clamp(1rem,4vw,1.9rem);
+  font-weight:700;
+}
 .ritem-val.ok{color:var(--remain-ok)}
 .ritem-val.low{color:var(--remain-low)}
 .ritem-val.empty{color:var(--remain-empty)}
-.extra-box{background:var(--warn-bg);border:1px solid var(--warn-text);border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,14px) clamp(11px,1.6vw,16px);margin-top:clamp(8px,1.4vw,13px);display:none}
-.extra-box-label{font-size:clamp(.65rem,1.2vw,.85rem);color:var(--warn-text);font-weight:600;margin-bottom:clamp(4px,.8vw,7px)}
-.extra-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:clamp(3px,.6vw,5px)}
-.extra-desc{font-size:clamp(.7rem,1.3vw,.9rem);color:var(--warn-text);opacity:.85}
-.extra-val{font-size:clamp(.95rem,2.2vw,1.4rem);font-weight:700;color:var(--warn-text)}
-.alert{border-radius:clamp(8px,1.5vw,14px);padding:clamp(9px,1.4vw,14px) clamp(11px,1.6vw,16px);font-size:clamp(.75rem,1.4vw,.9rem);line-height:1.5;margin-top:clamp(8px,1.4vw,13px)}
+
+/* extra box */
+.extra-box{
+  background:var(--warn-bg);border:1px solid var(--warn-text);
+  border-radius:clamp(8px,2vw,14px);
+  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,18px);
+  margin-top:clamp(10px,2vw,14px);display:none;
+}
+.extra-box-label{
+  font-size:clamp(.68rem,2.2vw,.85rem);
+  color:var(--warn-text);font-weight:600;
+  margin-bottom:clamp(5px,1.2vw,8px);
+}
+.extra-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:clamp(3px,.8vw,5px);
+}
+.extra-desc{
+  font-size:clamp(.7rem,2.2vw,.88rem);
+  color:var(--warn-text);opacity:.85;
+}
+.extra-val{
+  font-size:clamp(1rem,3.5vw,1.5rem);
+  font-weight:700;color:var(--warn-text);
+}
+.alert{
+  border-radius:clamp(8px,2vw,14px);
+  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,18px);
+  font-size:clamp(.75rem,2.3vw,.92rem);
+  line-height:1.5;margin-top:clamp(10px,2vw,14px);
+}
 .alert.warn{background:var(--warn-bg);color:var(--warn-text)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
-.modal{background:var(--modal-bg);border-radius:clamp(16px,2.5vw,24px);padding:clamp(16px,2.5vw,26px);width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.3);transition:background .2s}
-.modal h3{font-size:clamp(.9rem,1.8vw,1.15rem);font-weight:700;color:var(--text);margin-bottom:clamp(12px,2vw,18px)}
-.modal-row{display:flex;align-items:flex-start;gap:clamp(8px,1.5vw,14px);padding:clamp(8px,1.2vw,11px) 0;border-bottom:1px solid var(--modal-border)}
+
+/* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;padding:clamp(12px,3vw,24px);
+}
+.modal{
+  background:var(--modal-bg);
+  border-radius:clamp(16px,3vw,26px);
+  padding:clamp(16px,4vw,28px);
+  width:100%;max-width:480px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  transition:background .2s;
+  max-height:90vh;overflow-y:auto;
+}
+.modal h3{
+  font-size:clamp(1rem,3vw,1.2rem);
+  font-weight:700;color:var(--text);
+  margin-bottom:clamp(12px,3vw,20px);
+}
+.modal-row{
+  display:flex;align-items:flex-start;
+  gap:clamp(8px,2vw,14px);
+  padding:clamp(8px,1.8vw,12px) 0;
+  border-bottom:1px solid var(--modal-border);
+}
 .modal-row:last-of-type{border-bottom:none;padding-bottom:0}
-.modal-icon{font-size:clamp(1rem,1.8vw,1.3rem);flex-shrink:0;width:clamp(22px,3vw,30px);text-align:center;margin-top:1px}
-.modal-text .mt{font-size:clamp(.8rem,1.5vw,.95rem);color:var(--text);font-weight:600}
-.modal-text .ms{font-size:clamp(.72rem,1.3vw,.85rem);color:var(--text2);margin-top:2px}
-.modal-close{width:100%;margin-top:clamp(14px,2vw,20px);padding:clamp(10px,1.5vw,15px);background:#1D9E75;color:#fff;border:none;border-radius:clamp(10px,1.8vw,16px);font-size:clamp(.85rem,1.5vw,1rem);font-weight:600;cursor:pointer}
+.modal-icon{
+  font-size:clamp(1rem,3vw,1.3rem);
+  flex-shrink:0;width:clamp(24px,5vw,32px);
+  text-align:center;margin-top:1px;
+}
+.modal-text .mt{
+  font-size:clamp(.82rem,2.5vw,1rem);
+  color:var(--text);font-weight:600;
+}
+.modal-text .ms{
+  font-size:clamp(.74rem,2.2vw,.88rem);
+  color:var(--text2);margin-top:2px;
+}
+.modal-close{
+  width:100%;
+  margin-top:clamp(14px,3vw,22px);
+  padding:clamp(12px,3vw,17px);
+  background:#1D9E75;color:#fff;border:none;
+  border-radius:clamp(10px,2.5vw,16px);
+  font-size:clamp(.88rem,2.5vw,1.05rem);
+  font-weight:600;cursor:pointer;
+}
 .modal-close:active{background:#0F6E56}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="zoom-wrap" id="zoom-wrap">
   <div class="topbar">
     <h1>ไทยช่วยไทย พลัส</h1>
     <div class="topbar-right">
       <span class="badge">60 / 40</span>
-      <button onclick="changeSize(-1)" style="background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:8px;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">−</button>
-      <span id="size-display" style="font-size:11px;color:#fff;min-width:28px;text-align:center;flex-shrink:0">100%</span>
-      <button onclick="changeSize(1)" style="background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:8px;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">+</button>
       <label class="theme-switch" aria-label="เปลี่ยนธีม">
         <input type="checkbox" id="theme-chk" onchange="toggleTheme()">
         <div class="theme-track"></div>
@@ -243,7 +461,7 @@ input[type=text]:focus{border-color:#1D9E75}
           <div class="extra-row"><span class="extra-desc">จ่ายจริง =</span><span class="extra-val" id="extra-actual">—</span></div>
           <div class="extra-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--warn-text)">
             <span class="extra-desc" style="font-weight:700;opacity:1">จ่ายเกินไป</span>
-            <span class="extra-val" id="extra-diff" style="font-size:clamp(1.1rem,2.8vw,1.8rem)">—</span>
+            <span class="extra-val" id="extra-diff">—</span>
           </div>
         </div>
         <div id="alert-box"></div>
@@ -252,8 +470,6 @@ input[type=text]:focus{border-color:#1D9E75}
   </div>
 </div>
 
-</div><!-- /zoom-wrap -->
-</div><!-- /app -->
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
     <h3>ข้อมูลโครงการ ไทยช่วยไทย พลัส</h3>
@@ -269,37 +485,22 @@ input[type=text]:focus{border-color:#1D9E75}
 </div>
 
 <script>
-// ระบบ zoom
-var zoomLevels=[0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.35,1.5,1.75,2.0];
-var zoomIdx=parseInt(localStorage.getItem('zoomIdx')||'4');
-function applyZoom(){
-  var z=zoomLevels[zoomIdx];
-  var el=document.getElementById('zoom-wrap');
-  el.style.transform='scale('+z+')';
-  el.style.width=(100/z)+'%';
-  // รอ 1 frame ให้ browser คำนวณ scrollHeight จริง
-  requestAnimationFrame(function(){
-    var h=el.scrollHeight;
-    el.style.height=(h*z)+'px';
-  });
-  document.getElementById('size-display').textContent=Math.round(z*100)+'%';
-  localStorage.setItem('zoomIdx',zoomIdx);
-}
-function changeSize(d){
-  zoomIdx=Math.max(0,Math.min(zoomLevels.length-1,zoomIdx+d));
-  applyZoom();
-}
-window.addEventListener('load',function(){setTimeout(applyZoom,50)});
-window.addEventListener('resize',applyZoom);
-
 var saved=localStorage.getItem('theme');
 var sysDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
 var theme=saved||(sysDark?'dark':'light');
-function applyTheme(t){document.documentElement.setAttribute('data-theme',t);var chk=document.getElementById('theme-chk');if(chk)chk.checked=(t==='dark');localStorage.setItem('theme',t);theme=t;}
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  var chk=document.getElementById('theme-chk');
+  if(chk)chk.checked=(t==='dark');
+  localStorage.setItem('theme',t);
+  theme=t;
+}
 function toggleTheme(){applyTheme(theme==='dark'?'light':'dark');}
 applyTheme(theme);
+
 function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' ฿'}
 function parseNum(s){var v=parseFloat(s.replace(/[^0-9.]/g,''));return isNaN(v)?0:v;}
+
 function calc(){
   var p=parseNum(document.getElementById('price').value);
   var bRaw=document.getElementById('budget').value.trim();
@@ -312,30 +513,47 @@ function calc(){
     bar.style.width=bPct+'%';
     bar.className='bbar-fill'+(b===0?' empty':b<=50?' low':'');
     document.getElementById('bleft').textContent='เหลือ '+fmt(b);
-    if(b>0){var maxP=parseFloat((b/0.6).toFixed(2));var youMax=parseFloat((maxP-b).toFixed(2));document.getElementById('max-box').style.display='block';document.getElementById('max-price').textContent=fmt(maxP);document.getElementById('max-sub').textContent='รัฐออก '+fmt(b)+' · คุณออก '+fmt(youMax);}
-    else{document.getElementById('max-box').style.display='none';}
-  } else {document.getElementById('bbar-wrap').style.display='none';}
+    if(b>0){
+      var maxP=parseFloat((b/0.6).toFixed(2));
+      var youMax=parseFloat((maxP-b).toFixed(2));
+      document.getElementById('max-box').style.display='block';
+      document.getElementById('max-price').textContent=fmt(maxP);
+      document.getElementById('max-sub').textContent='รัฐออก '+fmt(b)+' · คุณออก '+fmt(youMax);
+    } else {
+      document.getElementById('max-box').style.display='none';
+    }
+  } else {
+    document.getElementById('bbar-wrap').style.display='none';
+  }
   if(!p){
-    document.getElementById('bg').style.width='60%';document.getElementById('bb').style.width='40%';
-    document.getElementById('gov').textContent='—';document.getElementById('you').textContent='—';
-    document.getElementById('gov-sub').textContent='60% ของราคา';document.getElementById('you-sub').textContent='40% ที่เหลือ';
+    document.getElementById('bg').style.width='60%';
+    document.getElementById('bb').style.width='40%';
+    document.getElementById('gov').textContent='—';
+    document.getElementById('you').textContent='—';
+    document.getElementById('gov-sub').textContent='60% ของราคา';
+    document.getElementById('you-sub').textContent='40% ที่เหลือ';
     document.getElementById('remain-grid').style.display='none';
     document.getElementById('extra-box').style.display='none';
-    document.getElementById('alert-box').innerHTML='';return;
+    document.getElementById('alert-box').innerHTML='';
+    return;
   }
   var gIdeal=parseFloat(Math.min(p*0.6,200).toFixed(2));
   var g=parseFloat(Math.min(gIdeal,b).toFixed(2));
   var y=parseFloat((p-g).toFixed(2));
   var gp=Math.round((g/p)*100);var yp=100-gp;
-  document.getElementById('gov').textContent=fmt(g);document.getElementById('you').textContent=fmt(y);
-  document.getElementById('gov-sub').textContent=gp+'% ของราคา';document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
-  document.getElementById('bg').style.width=gp+'%';document.getElementById('bb').style.width=yp+'%';
-  var remGov=parseFloat((b-g).toFixed(2));var remBuy=parseFloat((remGov/0.6).toFixed(2));
+  document.getElementById('gov').textContent=fmt(g);
+  document.getElementById('you').textContent=fmt(y);
+  document.getElementById('gov-sub').textContent=gp+'% ของราคา';
+  document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
+  document.getElementById('bg').style.width=gp+'%';
+  document.getElementById('bb').style.width=yp+'%';
+  var remGov=parseFloat((b-g).toFixed(2));
+  var remBuy=parseFloat((remGov/0.6).toFixed(2));
   document.getElementById('remain-grid').style.display='grid';
-  var rv1=document.getElementById('remain-gov');var rv2=document.getElementById('remain-buy');
+  var rv1=document.getElementById('remain-gov');
+  var rv2=document.getElementById('remain-buy');
   rv1.textContent=fmt(remGov);rv1.className='ritem-val '+(remGov===0?'empty':remGov<=50?'low':'ok');
   rv2.textContent=fmt(remBuy);rv2.className='ritem-val '+(remBuy===0?'empty':remBuy<=83?'low':'ok');
-  // เปรียบกับ "ถ้าวงเงินรัฐพอ" = ซื้อที่ราคา cap สูงสุด b/0.6 แล้วคุณออก 40% = b/0.6*0.4 = b*2/3
   var normalPay=parseFloat((b*(2/3)).toFixed(2));
   var extraPay=parseFloat((y-normalPay).toFixed(2));
   var eb=document.getElementById('extra-box');
@@ -344,7 +562,9 @@ function calc(){
     document.getElementById('extra-normal').textContent=fmt(normalPay);
     document.getElementById('extra-actual').textContent=fmt(y);
     document.getElementById('extra-diff').textContent='+'+fmt(extraPay);
-  } else {eb.style.display='none';}
+  } else {
+    eb.style.display='none';
+  }
   var msg='';
   if(b===0){msg='<div class="alert warn">⚠️ วงเงินหมดแล้ว — ต้องจ่ายเองทั้งหมด '+fmt(p)+'</div>';}
   else if(hasBudget&&gIdeal>b){msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';}
