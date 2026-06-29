@@ -1,10 +1,10 @@
 {
-  "name": "ไทยช่วยไทย พลัส",
-  "short_name": "ไทยช่วยไทย",
+  "name": "คิด 60/40",
+  "short_name": "คิด 60/40",
   "description": "คำนวณสิทธิ์โครงการไทยช่วยไทย 60/40",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f4f6f4",
+  "background_color": "#1D9E75",
   "theme_color": "#1D9E75",
   "orientation": "portrait",
   "icons": [
