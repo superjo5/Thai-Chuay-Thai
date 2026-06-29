@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1D9E75">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ไทยช่วยไทย">
-<title>ไทยช่วยไทย พลัส</title>
+<meta name="apple-mobile-web-app-title" content="คิด 60/40">
+<title>คิด 60/40</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root,[data-theme="light"]{
@@ -69,42 +69,54 @@ body{
 
 /* ===== TOPBAR ===== */
 .topbar{
-  background:#1D9E75;
-  border-radius:clamp(12px,2.5vw,18px);
-  padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,20px);
+  background:linear-gradient(135deg,#1D9E75 0%,#17856300 100%),#1D9E75;
+  border-radius:clamp(14px,3vw,22px);
+  padding:clamp(14px,3vw,22px) clamp(16px,3.5vw,26px);
   color:#fff;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:clamp(6px,1.5vw,12px);
-  flex-wrap:nowrap;
+  gap:12px;
+  box-shadow:0 4px 20px rgba(29,158,117,.35);
+}
+.topbar-left{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+  flex-shrink:1;
 }
 .topbar h1{
-  font-size:clamp(1rem,4vw,1.35rem);
+  font-size:clamp(1.1rem,4.5vw,1.55rem);
   font-weight:700;
+  letter-spacing:-.01em;
   white-space:nowrap;
-  flex-shrink:1;
-  min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
+  line-height:1.2;
+}
+.badge{
+  font-size:clamp(.65rem,2vw,.78rem);
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.28);
+  padding:2px 8px;
+  border-radius:20px;
+  white-space:nowrap;
+  font-weight:600;
+  letter-spacing:.06em;
+  width:fit-content;
+  opacity:.85;
 }
 .topbar-right{
   display:flex;
   align-items:center;
-  gap:clamp(5px,1.2vw,10px);
+  gap:clamp(8px,2vw,14px);
   flex-shrink:0;
-}
-.badge{
-  font-size:clamp(.7rem,2.5vw,.85rem);
-  background:rgba(255,255,255,.2);
-  padding:clamp(2px,.5vw,4px) clamp(6px,1.5vw,10px);
-  border-radius:20px;
-  white-space:nowrap;
 }
 .theme-switch{
   position:relative;
-  width:clamp(38px,9vw,48px);
-  height:clamp(22px,5vw,26px);
+  width:clamp(42px,10vw,52px);
+  height:clamp(24px,5.5vw,28px);
   flex-shrink:0;cursor:pointer;
   display:inline-flex;align-items:center;
 }
@@ -112,34 +124,40 @@ body{
 .theme-track{
   position:absolute;inset:0;
   background:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.35);
   border-radius:99px;
   transition:background .3s;
 }
 .theme-track:before{
   content:'';position:absolute;
-  width:clamp(16px,4vw,20px);
-  height:clamp(16px,4vw,20px);
+  width:clamp(18px,4.2vw,22px);
+  height:clamp(18px,4.2vw,22px);
   left:3px;top:50%;transform:translateY(-50%);
   background:#fff;border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
   transition:transform .3s cubic-bezier(.4,0,.2,1);
 }
 .theme-icons{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 4px;
-  font-size:clamp(9px,2.2vw,12px);
+  padding:0 5px;
+  font-size:clamp(10px,2.5vw,13px);
   pointer-events:none;
 }
-input:checked+.theme-track{background:rgba(0,0,0,.35)}
-input:checked+.theme-track:before{transform:translateY(-50%) translateX(clamp(16px,4vw,22px))}
+input:checked+.theme-track{background:rgba(0,0,0,.4)}
+input:checked+.theme-track:before{transform:translateY(-50%) translateX(clamp(18px,4vw,24px))}
 .info-btn{
-  background:rgba(255,255,255,.25);border:none;color:#fff;
-  border-radius:20px;
-  padding:clamp(3px,.8vw,6px) clamp(8px,2vw,14px);
-  font-size:clamp(.68rem,2.2vw,.82rem);
+  background:rgba(255,255,255,.2);
+  border:1.5px solid rgba(255,255,255,.35);
+  color:#fff;
+  border-radius:12px;
+  padding:clamp(6px,1.5vw,9px) clamp(10px,2.5vw,16px);
+  font-size:clamp(.78rem,2.5vw,.9rem);
   font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:background .15s;
+  display:flex;align-items:center;gap:4px;
 }
-.info-btn:active{background:rgba(255,255,255,.4)}
+.info-btn:active{background:rgba(255,255,255,.38)}
 
 /* ===== GRID ===== */
 .main-grid{
@@ -164,10 +182,10 @@ input:checked+.theme-track:before{transform:translateY(-50%) translateX(clamp(16
   transition:background .2s;
 }
 .lbl{
-  font-size:clamp(.7rem,2.2vw,.85rem);
-  font-weight:600;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.06em;
-  margin-bottom:clamp(6px,1.5vw,12px);
+  font-size:clamp(.88rem,3vw,1.05rem);
+  font-weight:700;color:var(--text);
+  letter-spacing:-.01em;
+  margin-bottom:clamp(8px,2vw,14px);
 }
 .inp-row{display:flex;align-items:center;gap:clamp(6px,1.5vw,12px)}
 .baht{
@@ -211,16 +229,16 @@ input[type=text]::placeholder{color:var(--muted)}
   margin-top:clamp(10px,2vw,16px);
 }
 .max-box-label{
-  font-size:clamp(.68rem,2.2vw,.85rem);
-  color:var(--max-label);font-weight:600;
-  margin-bottom:clamp(4px,1vw,8px);
+  font-size:clamp(.82rem,2.8vw,1rem);
+  color:var(--max-label);font-weight:700;
+  margin-bottom:clamp(5px,1.2vw,9px);
 }
 .max-box-val{
   font-size:clamp(1.3rem,4.5vw,2.2rem);
   font-weight:700;color:var(--max-amt);line-height:1.1;
 }
 .max-box-sub{
-  font-size:clamp(.65rem,2vw,.82rem);
+  font-size:clamp(.78rem,2.5vw,.92rem);
   color:var(--max-sub);margin-top:clamp(3px,.8vw,6px);
 }
 
@@ -250,20 +268,26 @@ input[type=text]::placeholder{color:var(--muted)}
 }
 .rc{
   border-radius:clamp(10px,2.5vw,18px);
-  padding:clamp(12px,2.5vw,20px) clamp(12px,2.5vw,20px);
+  padding:clamp(12px,2.5vw,20px) clamp(10px,2vw,16px);
   transition:background .2s;
+  overflow:hidden;
+  min-width:0;
 }
 .rc.gov{background:var(--gov-bg);border:1px solid var(--gov-border)}
 .rc.you{background:var(--you-bg);border:1px solid var(--you-border)}
 .rc-label{
-  font-size:clamp(.7rem,2.2vw,.88rem);font-weight:600;
-  margin-bottom:clamp(4px,1vw,8px);
+  font-size:clamp(.82rem,2.8vw,1rem);font-weight:700;
+  margin-bottom:clamp(5px,1.2vw,9px);
 }
 .rc-label.green{color:var(--gov-label)}
 .rc-label.blue{color:var(--you-label)}
 .rc-amount{
-  font-size:clamp(1.4rem,5.5vw,3rem);
-  font-weight:700;line-height:1;word-break:break-all;
+  font-size:clamp(1rem,3.8vw,2rem);
+  font-weight:700;line-height:1.1;
+  white-space:nowrap;
+  overflow:hidden;
+  display:block;
+  max-width:100%;
 }
 .rc-amount.green{color:var(--gov-amt)}
 .rc-amount.blue{color:var(--you-amt)}
@@ -286,7 +310,8 @@ input[type=text]::placeholder{color:var(--muted)}
   transition:background .2s;
 }
 .ritem-label{
-  font-size:clamp(.62rem,2vw,.78rem);
+  font-size:clamp(.78rem,2.5vw,.92rem);
+  font-weight:600;
   color:var(--muted);margin-bottom:clamp(4px,1vw,7px);line-height:1.4;
 }
 .ritem-val{
@@ -305,27 +330,27 @@ input[type=text]::placeholder{color:var(--muted)}
   margin-top:clamp(10px,2vw,14px);display:none;
 }
 .extra-box-label{
-  font-size:clamp(.68rem,2.2vw,.85rem);
-  color:var(--warn-text);font-weight:600;
-  margin-bottom:clamp(5px,1.2vw,8px);
+  font-size:clamp(.82rem,2.8vw,1rem);
+  color:var(--warn-text);font-weight:700;
+  margin-bottom:clamp(6px,1.5vw,10px);
 }
 .extra-row{
   display:flex;justify-content:space-between;align-items:baseline;
-  margin-top:clamp(3px,.8vw,5px);
+  margin-top:clamp(4px,1vw,7px);
 }
 .extra-desc{
-  font-size:clamp(.7rem,2.2vw,.88rem);
-  color:var(--warn-text);opacity:.85;
+  font-size:clamp(.82rem,2.6vw,1rem);
+  color:var(--warn-text);opacity:.9;
 }
 .extra-val{
-  font-size:clamp(1rem,3.5vw,1.5rem);
+  font-size:clamp(1.1rem,4vw,1.7rem);
   font-weight:700;color:var(--warn-text);
 }
 .alert{
   border-radius:clamp(8px,2vw,14px);
   padding:clamp(10px,2vw,16px) clamp(12px,2.5vw,18px);
-  font-size:clamp(.75rem,2.3vw,.92rem);
-  line-height:1.5;margin-top:clamp(10px,2vw,14px);
+  font-size:clamp(.85rem,2.8vw,1.02rem);
+  line-height:1.6;margin-top:clamp(10px,2vw,14px);
 }
 .alert.warn{background:var(--warn-bg);color:var(--warn-text)}
 
@@ -384,15 +409,16 @@ input[type=text]::placeholder{color:var(--muted)}
 <body>
 <div class="app">
   <div class="topbar">
-    <h1>ไทยช่วยไทย พลัส</h1>
+    <div class="topbar-left">
+      <h1>คิด 60/40</h1>
+    </div>
     <div class="topbar-right">
-      <span class="badge">60 / 40</span>
       <label class="theme-switch" aria-label="เปลี่ยนธีม">
         <input type="checkbox" id="theme-chk" onchange="toggleTheme()">
         <div class="theme-track"></div>
         <div class="theme-icons"><span>☀️</span><span>🌙</span></div>
       </label>
-      <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'">ข้อมูลโครงการ</button>
+      <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'">ℹ️ โครงการ</button>
     </div>
   </div>
 
@@ -472,7 +498,7 @@ input[type=text]::placeholder{color:var(--muted)}
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
-    <h3>ข้อมูลโครงการ ไทยช่วยไทย พลัส</h3>
+    <h3>ข้อมูลโครงการ คิด 60/40</h3>
     <div class="modal-row"><div class="modal-icon">📅</div><div class="modal-text"><div class="mt">ระยะเวลา</div><div class="ms">1 มิ.ย. – 30 ก.ย. 2569 (4 เดือน)</div></div></div>
     <div class="modal-row"><div class="modal-icon">💰</div><div class="modal-text"><div class="mt">วงเงิน</div><div class="ms">1,000 ฿/เดือน · รวมตลอดโครงการ 4,000 ฿</div></div></div>
     <div class="modal-row"><div class="modal-icon">📆</div><div class="modal-text"><div class="mt">วันโอนวงเงิน</div><div class="ms">ทุกวันที่ 1 ของเดือน</div></div></div>
@@ -485,7 +511,24 @@ input[type=text]::placeholder{color:var(--muted)}
 </div>
 
 <script>
-var saved=localStorage.getItem('theme');
+function fitAmounts(){
+  document.querySelectorAll('.rc-amount').forEach(function(el){
+    el.style.fontSize='';
+    var maxW=el.parentElement.clientWidth - 20;
+    var fs=parseFloat(getComputedStyle(el).fontSize);
+    var max=fs;
+    el.style.fontSize=max+'px';
+    while(el.scrollWidth>maxW && max>10){
+      max-=1;
+      el.style.fontSize=max+'px';
+    }
+  });
+}
+window.addEventListener('load',fitAmounts);
+window.addEventListener('resize',fitAmounts);
+// hook into calc
+var _origCalc=calc;
+calc=function(){_origCalc();requestAnimationFrame(fitAmounts);};
 var sysDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
 var theme=saved||(sysDark?'dark':'light');
 function applyTheme(t){
