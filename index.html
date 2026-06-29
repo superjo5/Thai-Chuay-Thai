@@ -529,6 +529,7 @@ window.addEventListener('resize',fitAmounts);
 // hook into calc
 var _origCalc=calc;
 calc=function(){_origCalc();requestAnimationFrame(fitAmounts);};
+var saved=localStorage.getItem('theme');
 var sysDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
 var theme=saved||(sysDark?'dark':'light');
 function applyTheme(t){
@@ -539,6 +540,10 @@ function applyTheme(t){
   theme=t;
 }
 function toggleTheme(){applyTheme(theme==='dark'?'light':'dark');}
+// ถ้าไม่เคย set ค่าไว้ ให้ follow ระบบอัตโนมัติ
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(e){
+  if(!localStorage.getItem('theme')) applyTheme(e.matches?'dark':'light');
+});
 applyTheme(theme);
 
 function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' ฿'}
