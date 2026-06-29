@@ -1,74 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@700;800;900&amp;display=swap');
-    </style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@900&amp;display=swap');</style>
   </defs>
 
   <!-- พื้นหลังครีม -->
   <rect width="512" height="512" rx="108" fill="#F4EFE4"/>
-  <!-- กรอบทองชั้นนอก -->
-  <rect x="12" y="12" width="488" height="488" rx="98" fill="none" stroke="#B8922A" stroke-width="9"/>
-  <!-- กรอบทองชั้นใน (เส้นบาง) -->
-  <rect x="22" y="22" width="468" height="468" rx="90" fill="none" stroke="#DDB84A" stroke-width="2.5"/>
+  <rect x="13" y="13" width="486" height="486" rx="97" fill="none" stroke="#B8922A" stroke-width="9"/>
+  <rect x="23" y="23" width="466" height="466" rx="89" fill="none" stroke="#DDB84A" stroke-width="2.5"/>
 
-  <!-- ข้อความ คำนวณ -->
-  <text x="256" y="160"
+  <!-- คำนวณ — ลดขนาดและขยับลงให้อยู่ในกรอบ -->
+  <text x="256" y="148"
     font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="108" fill="#1A6E6A"
+    font-weight="900" font-size="96" fill="#1A6E6A"
     text-anchor="middle">คำนวณ</text>
 
-  <!-- กล่องซ้าย เราจ่าย (ฟ้า) -->
-  <rect x="30" y="210" width="218" height="272" rx="24" fill="#90C8E8"/>
-  <!-- กล่องขวา รัฐจ่าย (เขียว) -->
-  <rect x="264" y="210" width="218" height="272" rx="24" fill="#7DC99A"/>
+  <!-- กล่องซ้าย -->
+  <rect x="32" y="178" width="214" height="300" rx="22" fill="#90C8E8"/>
+  <!-- กล่องขวา -->
+  <rect x="266" y="178" width="214" height="300" rx="22" fill="#7DC99A"/>
 
-  <!-- label เราจ่าย -->
-  <text x="139" y="260"
+  <!-- labels -->
+  <text x="139" y="224"
     font-family="'Noto Sans Thai',sans-serif"
-    font-weight="800" font-size="38" fill="white"
-    text-anchor="middle">เราจ่าย</text>
-
-  <!-- label รัฐจ่าย -->
-  <text x="373" y="260"
+    font-weight="800" font-size="36" fill="white" text-anchor="middle">เราจ่าย</text>
+  <text x="373" y="224"
     font-family="'Noto Sans Thai',sans-serif"
-    font-weight="800" font-size="38" fill="white"
-    text-anchor="middle">รัฐจ่าย</text>
+    font-weight="800" font-size="36" fill="white" text-anchor="middle">รัฐจ่าย</text>
 
   <!-- เหรียญใหญ่ -->
-  <circle cx="118" cy="390" r="68" fill="#E8A800"/>
-  <circle cx="118" cy="390" r="58" fill="#F5C000"/>
-  <circle cx="118" cy="390" r="50" fill="#FFCF20"/>
-  <text x="118" y="410"
-    font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="58" fill="#A06800"
-    text-anchor="middle">฿</text>
-  <!-- เหรียญเล็ก (ซ้อน) -->
-  <circle cx="168" cy="420" r="44" fill="#D99800"/>
-  <circle cx="168" cy="420" r="36" fill="#E8A800"/>
-  <circle cx="168" cy="420" r="30" fill="#F5C000"/>
-  <text x="168" y="436"
-    font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="38" fill="#A06800"
-    text-anchor="middle">฿</text>
+  <circle cx="110" cy="370" r="64" fill="#E8A800"/>
+  <circle cx="110" cy="370" r="54" fill="#F5C000"/>
+  <circle cx="110" cy="370" r="46" fill="#FFCF20"/>
+  <text x="110" y="389" font-family="'Noto Sans Thai',sans-serif"
+    font-weight="900" font-size="54" fill="#9A6200" text-anchor="middle">฿</text>
+  <!-- เหรียญเล็ก -->
+  <circle cx="178" cy="428" r="42" fill="#D99800"/>
+  <circle cx="178" cy="428" r="34" fill="#F0B000"/>
+  <circle cx="178" cy="428" r="27" fill="#F8C400"/>
+  <text x="178" y="444" font-family="'Noto Sans Thai',sans-serif"
+    font-weight="900" font-size="34" fill="#9A6200" text-anchor="middle">฿</text>
 
-  <!-- อาคารรัฐ ฝั่งขวา -->
-  <!-- โดมบน -->
-  <ellipse cx="373" cy="315" rx="44" ry="26" fill="#9EAAB0"/>
-  <ellipse cx="373" cy="312" rx="36" ry="20" fill="#B8C4C8"/>
-  <circle cx="373" cy="296" r="10" fill="#9EAAB0"/>
-  <!-- ตัวอาคาร -->
-  <rect x="320" y="336" width="106" height="70" rx="5" fill="#B8C4C8"/>
-  <!-- เสา 5 ต้น -->
-  <rect x="328" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
-  <rect x="346" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
-  <rect x="364" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
-  <rect x="382" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
-  <rect x="400" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
-  <!-- บันได 3 ขั้น -->
-  <rect x="312" y="406" width="122" height="10" rx="3" fill="#8E9A9E"/>
-  <rect x="304" y="416" width="138" height="10" rx="3" fill="#808C90"/>
-  <rect x="296" y="426" width="154" height="10" rx="3" fill="#727E82"/>
-  <!-- หน้าต่างประตู -->
-  <rect x="357" y="358" width="32" height="38" rx="4" fill="#6A9FAA"/>
+  <!-- อาคารรัฐ — ย่อให้พอดีกล่องขวา -->
+  <ellipse cx="373" cy="286" rx="40" ry="24" fill="#9EAAB0"/>
+  <ellipse cx="373" cy="283" rx="33" ry="18" fill="#B8C4C8"/>
+  <circle cx="373" cy="268" r="9" fill="#9EAAB0"/>
+  <rect x="324" y="306" width="98" height="64" rx="4" fill="#B8C4C8"/>
+  <rect x="331" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
+  <rect x="348" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
+  <rect x="365" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
+  <rect x="382" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
+  <rect x="399" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
+  <rect x="316" y="370" width="114" height="9" rx="3" fill="#8E9A9E"/>
+  <rect x="308" y="379" width="130" height="9" rx="3" fill="#808C90"/>
+  <rect x="300" y="388" width="146" height="9" rx="3" fill="#727E82"/>
+  <rect x="358" y="328" width="30" height="36" rx="4" fill="#6A9FAA"/>
 </svg>
