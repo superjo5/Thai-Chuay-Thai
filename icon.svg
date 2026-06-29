@@ -1,57 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@900&amp;display=swap');</style>
+    <clipPath id="shape"><rect width="512" height="512" rx="108"/></clipPath>
   </defs>
 
-  <!-- พื้นหลังครีม -->
-  <rect width="512" height="512" rx="108" fill="#F4EFE4"/>
-  <rect x="13" y="13" width="486" height="486" rx="97" fill="none" stroke="#B8922A" stroke-width="9"/>
-  <rect x="23" y="23" width="466" height="466" rx="89" fill="none" stroke="#DDB84A" stroke-width="2.5"/>
+  <!-- ทุกอย่าง clip ตามรูปร่างไอคอน -->
+  <g clip-path="url(#shape)">
+    <!-- พื้นหลังเขียว gradient สองโทน -->
+    <rect width="512" height="512" fill="#1D9E75"/>
+    <!-- แถบล่าง 60/40 สีเข้มกว่า -->
+    <rect x="0" y="310" width="512" height="202" fill="#0F6E56"/>
+    <!-- เส้นแบ่งบางๆ -->
+    <rect x="0" y="308" width="512" height="4" fill="#ffffff" fill-opacity="0.15"/>
 
-  <!-- คำนวณ — ลดขนาดและขยับลงให้อยู่ในกรอบ -->
-  <text x="256" y="148"
-    font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="96" fill="#1A6E6A"
-    text-anchor="middle">คำนวณ</text>
+    <!-- คำนวณ -->
+    <text x="256" y="248"
+      font-family="'Noto Sans Thai',sans-serif"
+      font-weight="900" font-size="128" fill="white"
+      text-anchor="middle">คำนวณ</text>
 
-  <!-- กล่องซ้าย -->
-  <rect x="32" y="178" width="214" height="300" rx="22" fill="#90C8E8"/>
-  <!-- กล่องขวา -->
-  <rect x="266" y="178" width="214" height="300" rx="22" fill="#7DC99A"/>
+    <!-- 60 ซ้าย -->
+    <text x="128" y="438"
+      font-family="'Noto Sans Thai',sans-serif"
+      font-weight="900" font-size="118" fill="white"
+      fill-opacity="0.95" text-anchor="middle">60</text>
 
-  <!-- labels -->
-  <text x="139" y="224"
-    font-family="'Noto Sans Thai',sans-serif"
-    font-weight="800" font-size="36" fill="white" text-anchor="middle">เราจ่าย</text>
-  <text x="373" y="224"
-    font-family="'Noto Sans Thai',sans-serif"
-    font-weight="800" font-size="36" fill="white" text-anchor="middle">รัฐจ่าย</text>
+    <!-- เส้นแบ่งกลาง -->
+    <rect x="248" y="322" width="16" height="168" rx="8" fill="white" fill-opacity="0.3"/>
 
-  <!-- เหรียญใหญ่ -->
-  <circle cx="110" cy="370" r="64" fill="#E8A800"/>
-  <circle cx="110" cy="370" r="54" fill="#F5C000"/>
-  <circle cx="110" cy="370" r="46" fill="#FFCF20"/>
-  <text x="110" y="389" font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="54" fill="#9A6200" text-anchor="middle">฿</text>
-  <!-- เหรียญเล็ก -->
-  <circle cx="178" cy="428" r="42" fill="#D99800"/>
-  <circle cx="178" cy="428" r="34" fill="#F0B000"/>
-  <circle cx="178" cy="428" r="27" fill="#F8C400"/>
-  <text x="178" y="444" font-family="'Noto Sans Thai',sans-serif"
-    font-weight="900" font-size="34" fill="#9A6200" text-anchor="middle">฿</text>
+    <!-- 40 ขวา -->
+    <text x="384" y="438"
+      font-family="'Noto Sans Thai',sans-serif"
+      font-weight="900" font-size="118" fill="white"
+      fill-opacity="0.6" text-anchor="middle">40</text>
+  </g>
 
-  <!-- อาคารรัฐ — ย่อให้พอดีกล่องขวา -->
-  <ellipse cx="373" cy="286" rx="40" ry="24" fill="#9EAAB0"/>
-  <ellipse cx="373" cy="283" rx="33" ry="18" fill="#B8C4C8"/>
-  <circle cx="373" cy="268" r="9" fill="#9EAAB0"/>
-  <rect x="324" y="306" width="98" height="64" rx="4" fill="#B8C4C8"/>
-  <rect x="331" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
-  <rect x="348" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
-  <rect x="365" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
-  <rect x="382" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
-  <rect x="399" y="310" width="11" height="56" rx="3" fill="#9EAAB0"/>
-  <rect x="316" y="370" width="114" height="9" rx="3" fill="#8E9A9E"/>
-  <rect x="308" y="379" width="130" height="9" rx="3" fill="#808C90"/>
-  <rect x="300" y="388" width="146" height="9" rx="3" fill="#727E82"/>
-  <rect x="358" y="328" width="30" height="36" rx="4" fill="#6A9FAA"/>
+  <!-- กรอบขาวบางๆ -->
+  <rect x="10" y="10" width="492" height="492" rx="104" fill="none" stroke="white" stroke-opacity="0.15" stroke-width="6"/>
 </svg>
