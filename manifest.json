@@ -4,10 +4,10 @@
   "description": "คำนวณสิทธิ์โครงการไทยช่วยไทย 60/40",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#1D9E75",
+  "background_color": "#F4EFE4",
   "theme_color": "#1D9E75",
   "orientation": "portrait",
   "icons": [
-    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    {"src": "icon.svg?v=3", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
   ]
 }
