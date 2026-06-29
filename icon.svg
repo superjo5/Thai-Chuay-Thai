@@ -1,52 +1,74 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1D9E75"/>
-      <stop offset="100%" style="stop-color:#0F6E56"/>
-    </linearGradient>
-    <linearGradient id="calc" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.18"/>
-      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.06"/>
-    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@700;800;900&amp;display=swap');
+    </style>
   </defs>
 
-  <!-- พื้นหลังกลม -->
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- พื้นหลังครีม -->
+  <rect width="512" height="512" rx="108" fill="#F4EFE4"/>
+  <!-- กรอบทองชั้นนอก -->
+  <rect x="12" y="12" width="488" height="488" rx="98" fill="none" stroke="#B8922A" stroke-width="9"/>
+  <!-- กรอบทองชั้นใน (เส้นบาง) -->
+  <rect x="22" y="22" width="468" height="468" rx="90" fill="none" stroke="#DDB84A" stroke-width="2.5"/>
 
-  <!-- เงาอ่อนๆ ด้านบน -->
-  <rect width="512" height="512" rx="112" fill="white" fill-opacity="0.06"/>
+  <!-- ข้อความ คำนวณ -->
+  <text x="256" y="160"
+    font-family="'Noto Sans Thai',sans-serif"
+    font-weight="900" font-size="108" fill="#1A6E6A"
+    text-anchor="middle">คำนวณ</text>
 
-  <!-- ตัว calculator -->
-  <rect x="96" y="80" width="320" height="352" rx="32" fill="url(#calc)" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
+  <!-- กล่องซ้าย เราจ่าย (ฟ้า) -->
+  <rect x="30" y="210" width="218" height="272" rx="24" fill="#90C8E8"/>
+  <!-- กล่องขวา รัฐจ่าย (เขียว) -->
+  <rect x="264" y="210" width="218" height="272" rx="24" fill="#7DC99A"/>
 
-  <!-- หน้าจอ display -->
-  <rect x="120" y="108" width="272" height="90" rx="16" fill="white" fill-opacity="0.15"/>
+  <!-- label เราจ่าย -->
+  <text x="139" y="260"
+    font-family="'Noto Sans Thai',sans-serif"
+    font-weight="800" font-size="38" fill="white"
+    text-anchor="middle">เราจ่าย</text>
 
-  <!-- เลข 60/40 บน display -->
-  <text x="256" y="163" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="800" font-size="52" fill="white" letter-spacing="-1">60/40</text>
+  <!-- label รัฐจ่าย -->
+  <text x="373" y="260"
+    font-family="'Noto Sans Thai',sans-serif"
+    font-weight="800" font-size="38" fill="white"
+    text-anchor="middle">รัฐจ่าย</text>
 
-  <!-- divider line -->
-  <line x1="120" y1="228" x2="392" y2="228" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/>
+  <!-- เหรียญใหญ่ -->
+  <circle cx="118" cy="390" r="68" fill="#E8A800"/>
+  <circle cx="118" cy="390" r="58" fill="#F5C000"/>
+  <circle cx="118" cy="390" r="50" fill="#FFCF20"/>
+  <text x="118" y="410"
+    font-family="'Noto Sans Thai',sans-serif"
+    font-weight="900" font-size="58" fill="#A06800"
+    text-anchor="middle">฿</text>
+  <!-- เหรียญเล็ก (ซ้อน) -->
+  <circle cx="168" cy="420" r="44" fill="#D99800"/>
+  <circle cx="168" cy="420" r="36" fill="#E8A800"/>
+  <circle cx="168" cy="420" r="30" fill="#F5C000"/>
+  <text x="168" y="436"
+    font-family="'Noto Sans Thai',sans-serif"
+    font-weight="900" font-size="38" fill="#A06800"
+    text-anchor="middle">฿</text>
 
-  <!-- ปุ่ม row 1 -->
-  <rect x="120" y="242" width="72" height="52" rx="12" fill="white" fill-opacity="0.12"/>
-  <rect x="208" y="242" width="72" height="52" rx="12" fill="white" fill-opacity="0.12"/>
-  <rect x="296" y="242" width="72" height="52" rx="12" fill="white" fill-opacity="0.12"/>
-  <rect x="120" y="308" width="72" height="52" rx="12" fill="white" fill-opacity="0.12"/>
-  <rect x="208" y="308" width="72" height="52" rx="12" fill="white" fill-opacity="0.12"/>
-  <!-- ปุ่ม = สีเน้น -->
-  <rect x="296" y="308" width="72" height="52" rx="12" fill="white" fill-opacity="0.3"/>
-  <!-- ปุ่ม row 3 -->
-  <rect x="120" y="374" width="160" height="42" rx="12" fill="white" fill-opacity="0.12"/>
-  <rect x="296" y="374" width="72" height="42" rx="12" fill="white" fill-opacity="0.12"/>
-
-  <!-- สัญลักษณ์บนปุ่ม -->
-  <text x="156" y="275" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">7</text>
-  <text x="244" y="275" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">8</text>
-  <text x="332" y="275" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">9</text>
-  <text x="156" y="341" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">4</text>
-  <text x="244" y="341" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">5</text>
-  <text x="332" y="341" text-anchor="middle" font-family="sans-serif" font-size="26" fill="white" font-weight="700">=</text>
-  <text x="200" y="402" text-anchor="middle" font-family="sans-serif" font-size="22" fill="white" fill-opacity="0.7">0</text>
-  <text x="332" y="402" text-anchor="middle" font-family="sans-serif" font-size="26" fill="white" fill-opacity="0.7">.</text>
+  <!-- อาคารรัฐ ฝั่งขวา -->
+  <!-- โดมบน -->
+  <ellipse cx="373" cy="315" rx="44" ry="26" fill="#9EAAB0"/>
+  <ellipse cx="373" cy="312" rx="36" ry="20" fill="#B8C4C8"/>
+  <circle cx="373" cy="296" r="10" fill="#9EAAB0"/>
+  <!-- ตัวอาคาร -->
+  <rect x="320" y="336" width="106" height="70" rx="5" fill="#B8C4C8"/>
+  <!-- เสา 5 ต้น -->
+  <rect x="328" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
+  <rect x="346" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
+  <rect x="364" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
+  <rect x="382" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
+  <rect x="400" y="340" width="12" height="62" rx="4" fill="#9EAAB0"/>
+  <!-- บันได 3 ขั้น -->
+  <rect x="312" y="406" width="122" height="10" rx="3" fill="#8E9A9E"/>
+  <rect x="304" y="416" width="138" height="10" rx="3" fill="#808C90"/>
+  <rect x="296" y="426" width="154" height="10" rx="3" fill="#727E82"/>
+  <!-- หน้าต่างประตู -->
+  <rect x="357" y="358" width="32" height="38" rx="4" fill="#6A9FAA"/>
 </svg>
