@@ -419,6 +419,7 @@ input[type=text]::placeholder{color:var(--muted)}
         <div class="theme-icons"><span>☀️</span><span>🌙</span></div>
       </label>
       <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'">ℹ️ โครงการ</button>
+      <button class="info-btn" onclick="document.getElementById('install-modal').style.display='flex'">📲 ติดตั้ง</button>
     </div>
   </div>
 
@@ -494,6 +495,19 @@ input[type=text]::placeholder{color:var(--muted)}
       </div>
     </div>
   </div>
+
+  <!-- bottom bar -->
+  <div style="display:flex;gap:clamp(8px,2vw,14px)">
+    <button onclick="doShare()"
+      style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:clamp(12px,3vw,16px);background:var(--card);border:none;border-radius:clamp(12px,3vw,18px);font-size:clamp(.82rem,2.5vw,1rem);font-weight:600;color:var(--text);cursor:pointer;box-shadow:var(--shadow)">
+      📤 แชร์ให้เพื่อน
+    </button>
+    <button onclick="document.getElementById('feedback-modal').style.display='flex'"
+      style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:clamp(12px,3vw,16px);background:var(--card);border:none;border-radius:clamp(12px,3vw,18px);font-size:clamp(.82rem,2.5vw,1rem);font-weight:600;color:var(--text);cursor:pointer;box-shadow:var(--shadow)">
+      💬 ส่งคำแนะนำ
+    </button>
+  </div>
+
 </div>
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
@@ -507,6 +521,62 @@ input[type=text]::placeholder{color:var(--muted)}
     <div class="modal-row"><div class="modal-icon">📱</div><div class="modal-text"><div class="mt">ช่องทางใช้สิทธิ์</div><div class="ms">แอป เป๋าตัง (G-Wallet)</div></div></div>
     <div class="modal-row"><div class="modal-icon">📞</div><div class="modal-text"><div class="mt">ติดต่อสอบถาม</div><div class="ms">0-2111-1122 (24 ชม.)</div></div></div>
     <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">ปิด</button>
+  </div>
+</div>
+
+<!-- modal วิธีติดตั้ง -->
+<div class="modal-overlay" id="install-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:480px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0">📲 เพิ่มไปหน้าจอหลัก</h3>
+      <button onclick="document.getElementById('install-modal').style.display='none'"
+        style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+
+    <!-- Android -->
+    <div style="background:var(--gov-bg);border:1px solid var(--gov-border);border-radius:14px;padding:16px;margin-bottom:12px">
+      <div style="font-weight:700;font-size:clamp(.88rem,2.8vw,1rem);color:var(--gov-label);margin-bottom:10px">🤖 Android (Chrome)</div>
+      <div id="android-install-btn-wrap">
+        <button onclick="doInstall()" id="android-prompt-btn"
+          style="width:100%;padding:12px;background:#1D9E75;color:white;border:none;border-radius:10px;font-size:clamp(.85rem,2.6vw,1rem);font-weight:700;cursor:pointer;margin-bottom:10px">
+          แตะที่นี่เพื่อติดตั้งเลย ✨
+        </button>
+      </div>
+      <div style="font-size:clamp(.75rem,2.3vw,.9rem);color:var(--text2);line-height:1.8">
+        หรือทำเอง:<br>
+        1️⃣ กดจุด 3 จุด <b>⋮</b> มุมขวาบน<br>
+        2️⃣ เลือก <b>"เพิ่มในหน้าจอหลัก"</b><br>
+        3️⃣ กด <b>"เพิ่ม"</b>
+      </div>
+    </div>
+
+    <!-- iOS -->
+    <div style="background:var(--you-bg);border:1px solid var(--you-border);border-radius:14px;padding:16px">
+      <div style="font-weight:700;font-size:clamp(.88rem,2.8vw,1rem);color:var(--you-label);margin-bottom:10px">🍎 iPhone / iPad (Safari)</div>
+      <div style="font-size:clamp(.75rem,2.3vw,.9rem);color:var(--text2);line-height:1.8">
+        1️⃣ เปิดแอปใน <b>Safari</b> (ไม่ใช่ Chrome)<br>
+        2️⃣ กดปุ่ม <b>แชร์</b> <span style="font-size:1.1em">□↑</span> ที่แถบด้านล่าง<br>
+        3️⃣ เลื่อนลงแล้วกด <b>"เพิ่มไปยังหน้าจอโฮม"</b><br>
+        4️⃣ กด <b>"เพิ่ม"</b> มุมขวาบน
+      </div>
+    </div>
+
+    <button class="modal-close" style="margin-top:14px" onclick="document.getElementById('install-modal').style.display='none'">ปิด</button>
+  </div>
+</div>
+<div class="modal-overlay" id="feedback-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:560px;padding:clamp(14px,3vw,22px)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0">💬 ส่งคำแนะนำ</h3>
+      <button onclick="document.getElementById('feedback-modal').style.display='none'"
+        style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);padding:4px">✕</button>
+    </div>
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLSc_G1V_HrwqS_9DA5i36jQO0N0Psd_l9oaFTFJHopfFCJBD1w/viewform?embedded=true"
+      width="100%" height="480" frameborder="0" marginheight="0" marginwidth="0"
+      style="border-radius:10px;display:block">
+      กำลังโหลด...
+    </iframe>
   </div>
 </div>
 
@@ -620,6 +690,80 @@ function calc(){
   document.getElementById('alert-box').innerHTML=msg;
 }
 </script>
+
+<script>
+// ===== SHARE =====
+function doShare(){
+  var url=location.href.split('?')[0];
+  if(navigator.share){
+    navigator.share({
+      title:'คิด 60/40 — คำนวณสิทธิ์ไทยช่วยไทย',
+      text:'แอปคำนวณสิทธิ์โครงการไทยช่วยไทย 60/40 ใช้ฟรี ไม่ต้องโหลด',
+      url:url
+    }).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function(){
+      showToast('คัดลอกลิงก์แล้ว! 📋');
+    }).catch(function(){
+      showToast('ลิงก์: '+url);
+    });
+  }
+}
+
+// ===== INSTALL PROMPT =====
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+});
+window.addEventListener('appinstalled',function(){
+  deferredPrompt=null;
+  document.getElementById('android-install-btn-wrap').style.display='none';
+  showToast('ติดตั้งสำเร็จแล้ว! 🎉');
+  document.getElementById('install-modal').style.display='none';
+});
+function doInstall(){
+  if(!deferredPrompt){
+    showToast('เปิดใน Chrome แล้วลองใหม่นะครับ');
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    deferredPrompt=null;
+  });
+}
+
+// ===== FEEDBACK =====
+function sendFeedback(){
+  var txt=document.getElementById('feedback-text').value.trim();
+  if(!txt){showToast('กรุณาพิมพ์คำแนะนำก่อนครับ');return;}
+  // ส่งผ่าน mailto ไปหาเจ้าของ
+  var subject=encodeURIComponent('คำแนะนำแอป คิด 60/40');
+  var body=encodeURIComponent(txt+'\n\n— ส่งจากแอป คิด 60/40\n'+location.href);
+  window.location.href='mailto:?subject='+subject+'&body='+body;
+  document.getElementById('feedback-modal').style.display='none';
+  document.getElementById('feedback-text').value='';
+  showToast('เปิดอีเมลให้แล้วครับ 📨');
+}
+
+// ===== TOAST =====
+function showToast(msg){
+  var t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toast';
+    t.style.cssText='position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:10px 20px;border-radius:24px;font-size:.9rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(function(){
+    t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';
+  },2800);
+}
+</script>
+
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
 </body>
 </html>
