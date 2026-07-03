@@ -542,9 +542,9 @@ input[type=text]::placeholder{color:var(--muted)}
           แตะที่นี่เพื่อติดตั้งเลย ✨
         </button>
       </div>
-      <div style="font-size:clamp(.75rem,2.3vw,.9rem);color:var(--text2);line-height:1.8">
-        หรือทำเอง:<br>
-        1️⃣ กดจุด 3 จุด <b>⋮</b> มุมขวาบน<br>
+      <div style="font-size:clamp(.78rem,2.4vw,.92rem);color:var(--text2);line-height:2">
+        ถ้าปุ่มด้านบนไม่ทำงาน ทำเองได้เลย:<br>
+        1️⃣ กดจุด 3 จุด <b>⋮</b> มุมขวาบนของ Chrome<br>
         2️⃣ เลือก <b>"เพิ่มในหน้าจอหลัก"</b><br>
         3️⃣ กด <b>"เพิ่ม"</b>
       </div>
@@ -712,6 +712,11 @@ function doShare(){
 
 // ===== INSTALL PROMPT =====
 var deferredPrompt=null;
+// ถ้าเปิดจากไอคอน (ติดตั้งแล้ว) ซ่อนปุ่มติดตั้งเลย
+var isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if(isStandalone){
+  document.querySelectorAll('[onclick*="install-modal"]').forEach(function(el){el.style.display='none';});
+}
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   deferredPrompt=e;
@@ -724,7 +729,8 @@ window.addEventListener('appinstalled',function(){
 });
 function doInstall(){
   if(!deferredPrompt){
-    showToast('เปิดใน Chrome แล้วลองใหม่นะครับ');
+    // ไม่มี prompt — แนะนำให้ทำเองผ่านเมนู Chrome
+    showToast('กด ⋮ มุมขวาบน → "เพิ่มในหน้าจอหลัก"');
     return;
   }
   deferredPrompt.prompt();
