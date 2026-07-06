@@ -460,7 +460,7 @@ input[type=text]::placeholder{color:var(--muted)}
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div class="lbl" style="margin:0">วงเงินรัฐเหลือวันนี้</div>
-          <button onclick="document.getElementById('budget').value='';document.getElementById('price').value='';calc()"
+          <button onclick="document.getElementById('budget').value='';document.getElementById('price').value='';document.getElementById('budget-warn').style.display='none';calc()"
             style="background:none;border:none;color:var(--muted);font-size:clamp(.72rem,2.2vw,.85rem);cursor:pointer;padding:4px 8px;border-radius:8px;font-weight:600">
             ล้างค่า ✕
           </button>
@@ -566,11 +566,11 @@ input[type=text]::placeholder{color:var(--muted)}
     <path d="M3 3v5h5"/>
     <path d="M12 7v5l4 2"/>
   </svg>
-  <span id="fab-badge" style="display:none;position:absolute;top:6px;right:6px;
-    background:#E24B4A;color:white;border-radius:10px;
-    font-size:10px;font-weight:700;min-width:16px;height:16px;
-    display:flex;align-items:center;justify-content:center;
-    padding:0 4px;border:2px solid #1D9E75;line-height:1"></span>
+  <span id="fab-badge" style="display:none;position:absolute;top:4px;right:4px;
+    background:white;color:#1D9E75;border-radius:10px;
+    font-size:10px;font-weight:800;min-width:16px;height:16px;
+    align-items:center;justify-content:center;
+    padding:0 4px;line-height:1"></span>
 </button>
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
@@ -802,10 +802,12 @@ function calc(){
 function checkBudget(){
   var v=parseNum(document.getElementById('budget').value);
   var warn=document.getElementById('budget-warn');
-  if(warn) warn.style.display=(v>200)?'block':'none';
+  if(!warn) return;
+  warn.style.display=(v>200&&v>0)?'block':'none';
 }
 
 // ===== HISTORY =====
+function commitHistory(){
   var p=parseNum(document.getElementById('price').value);
   if(!p) return;
   var bRaw=document.getElementById('budget').value.trim();
@@ -824,7 +826,7 @@ function saveHistory(price, budget, gov, you){
   var timeStr = now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
   var dateStr = now.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
   history_list.unshift({date:dateStr+' '+timeStr,price:price,budget:budget,gov:gov,you:you});
-  if(history_list.length > 20) history_list.pop();
+  if(history_list.length > 9) history_list.pop();
   localStorage.setItem('calc_history', JSON.stringify(history_list));
   updateBadge();
   renderHistory();
@@ -835,7 +837,7 @@ function updateBadge(){
   if(!b) return;
   if(history_list.length>0){
     b.style.display='flex';
-    b.textContent=history_list.length>9?'9+':history_list.length;
+    b.textContent=history_list.length;
   } else {
     b.style.display='none';
   }
@@ -909,6 +911,7 @@ function clearHistory(){
     history_list=[];
     localStorage.removeItem('calc_history');
     renderHistory();
+    updateBadge();
     modal.style.display='none';
     showToast('ล้างประวัติแล้วครับ 🗑️');
   };
@@ -937,6 +940,12 @@ var isStandalone=window.matchMedia('(display-mode: standalone)').matches||window
 if(isStandalone){
   document.querySelectorAll('[onclick*="install-modal"]').forEach(function(el){el.style.display='none';});
 }
+// ซ่อนปุ่มติดตั้งตอนโหลดด้วย ถ้าไม่มี prompt และเป็น standalone
+window.addEventListener('load',function(){
+  if(isStandalone){
+    document.querySelectorAll('[onclick*="install-modal"]').forEach(function(el){el.style.display='none';});
+  }
+});
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   deferredPrompt=e;
