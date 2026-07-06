@@ -508,6 +508,18 @@ input[type=text]::placeholder{color:var(--muted)}
     </button>
   </div>
 
+  <!-- ประวัติการคิด -->
+  <div class="card" id="history-card" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="lbl" style="margin:0">🕐 ประวัติการคิด</div>
+      <button onclick="clearHistory()"
+        style="background:none;border:none;color:var(--muted);font-size:clamp(.72rem,2.2vw,.85rem);cursor:pointer;padding:4px 8px;border-radius:8px">
+        ล้างทั้งหมด
+      </button>
+    </div>
+    <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+
 </div>
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
@@ -696,11 +708,82 @@ function calc(){
   else if(hasBudget&&gIdeal>b){msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';}
   else if(p*0.6>200){msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';}
   document.getElementById('alert-box').innerHTML=msg;
+  // บันทึกประวัติ
+  saveHistory(p, b, g, y);
 }
 </script>
 
 <script>
-// ===== SHARE =====
+// ===== HISTORY =====
+var history_list = JSON.parse(localStorage.getItem('calc_history')||'[]');
+
+function saveHistory(price, budget, gov, you){
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+  var dateStr = now.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
+  history_list.unshift({
+    date: dateStr+' '+timeStr,
+    price: price,
+    budget: budget,
+    gov: gov,
+    you: you
+  });
+  if(history_list.length > 20) history_list.pop(); // เก็บแค่ 20 รายการ
+  localStorage.setItem('calc_history', JSON.stringify(history_list));
+  renderHistory();
+}
+
+function renderHistory(){
+  var card = document.getElementById('history-card');
+  var list = document.getElementById('history-list');
+  if(!history_list.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  list.innerHTML = history_list.map(function(h,i){
+    return '<div onclick="loadHistory('+i+')" style="display:flex;justify-content:space-between;align-items:center;'+
+      'padding:clamp(10px,2vw,14px) clamp(12px,2.5vw,16px);'+
+      'background:var(--input-bg);border-radius:clamp(8px,2vw,12px);cursor:pointer;gap:8px;'+
+      'border:1px solid var(--border);transition:background .15s" '+
+      'onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\'var(--input-bg)\'">' +
+
+      '<div style="display:flex;flex-direction:column;gap:3px;min-width:0">' +
+        '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--text)">'+
+          '฿ '+fmt(h.price)+(h.budget<200?' · วงเงิน '+fmt(h.budget):'') +
+        '</div>' +
+        '<div style="font-size:clamp(.68rem,2vw,.82rem);color:var(--muted)">'+h.date+'</div>' +
+      '</div>' +
+
+      '<div style="display:flex;gap:clamp(8px,2vw,14px);flex-shrink:0;align-items:center">' +
+        '<div style="text-align:right">' +
+          '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--gov-label);font-weight:600">รัฐออก</div>' +
+          '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--gov-amt)">'+fmt(h.gov)+'</div>' +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--you-label);font-weight:600">คุณเติม</div>' +
+          '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--you-amt)">'+fmt(h.you)+'</div>' +
+        '</div>' +
+      '</div>' +
+
+    '</div>';
+  }).join('');
+}
+
+function loadHistory(i){
+  var h = history_list[i];
+  document.getElementById('price').value = h.price;
+  if(h.budget < 200) document.getElementById('budget').value = h.budget;
+  calc();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function clearHistory(){
+  if(!confirm('ล้างประวัติทั้งหมด?')) return;
+  history_list = [];
+  localStorage.removeItem('calc_history');
+  renderHistory();
+}
+
+// โหลดประวัติตอนเริ่ม
+renderHistory();
 function doShare(){
   var url=location.href.split('?')[0];
   if(navigator.share){
