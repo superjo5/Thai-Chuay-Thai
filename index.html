@@ -565,18 +565,26 @@ input[type=text]::placeholder{color:var(--muted)}
   </div>
 </div>
 <div class="modal-overlay" id="feedback-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal" style="max-width:560px;padding:clamp(14px,3vw,22px)">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+  <div class="modal" style="max-width:480px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
       <h3 style="margin:0">💬 ส่งคำแนะนำ</h3>
       <button onclick="document.getElementById('feedback-modal').style.display='none'"
-        style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);padding:4px">✕</button>
+        style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)">✕</button>
     </div>
-    <iframe
-      src="https://docs.google.com/forms/d/e/1FAIpQLSc_G1V_HrwqS_9DA5i36jQO0N0Psd_l9oaFTFJHopfFCJBD1w/viewform?embedded=true"
-      width="100%" height="480" frameborder="0" marginheight="0" marginwidth="0"
-      style="border-radius:10px;display:block">
-      กำลังโหลด...
-    </iframe>
+    <p style="font-size:clamp(.78rem,2.4vw,.92rem);color:var(--text2);margin-bottom:14px;line-height:1.6">พบปัญหา หรืออยากให้เพิ่มฟีเจอร์อะไร? บอกเราได้เลยครับ</p>
+    <textarea id="feedback-text" rows="5"
+      placeholder="เช่น อยากให้คำนวณแบบ... / พบบัคตรงที่..."
+      style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--border);
+      background:var(--input-bg);color:var(--text);
+      font-size:clamp(.85rem,2.6vw,1rem);font-family:inherit;
+      resize:vertical;outline:none;transition:border-color .2s;box-sizing:border-box"
+      onfocus="this.style.borderColor='#1D9E75'"
+      onblur="this.style.borderColor=''"></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="modal-close" style="flex:1;background:var(--input-bg);color:var(--text)"
+        onclick="document.getElementById('feedback-modal').style.display='none'">ยกเลิก</button>
+      <button class="modal-close" style="flex:1" id="feedback-submit-btn" onclick="sendFeedback()">📨 ส่ง</button>
+    </div>
   </div>
 </div>
 
@@ -743,13 +751,25 @@ function doInstall(){
 function sendFeedback(){
   var txt=document.getElementById('feedback-text').value.trim();
   if(!txt){showToast('กรุณาพิมพ์คำแนะนำก่อนครับ');return;}
-  // ส่งผ่าน mailto ไปหาเจ้าของ
-  var subject=encodeURIComponent('คำแนะนำแอป คิด 60/40');
-  var body=encodeURIComponent(txt+'\n\n— ส่งจากแอป คิด 60/40\n'+location.href);
-  window.location.href='mailto:?subject='+subject+'&body='+body;
-  document.getElementById('feedback-modal').style.display='none';
-  document.getElementById('feedback-text').value='';
-  showToast('เปิดอีเมลให้แล้วครับ 📨');
+  var btn=document.getElementById('feedback-submit-btn');
+  btn.textContent='กำลังส่ง...';
+  btn.disabled=true;
+  fetch('https://script.google.com/macros/s/AKfycbxO_2SphSNGA8ixKml_Av_OoL3L0Fy1c58YLf9DB_xVyj3wTk7wPLhjnyT_jF6auubF/exec',{
+    method:'POST',
+    body:JSON.stringify({
+      message:txt,
+      device:navigator.userAgent
+    })
+  }).then(function(){
+    document.getElementById('feedback-modal').style.display='none';
+    document.getElementById('feedback-text').value='';
+    showToast('ส่งคำแนะนำแล้ว ขอบคุณครับ 🙏');
+  }).catch(function(){
+    showToast('ส่งไม่ได้ กรุณาเช็คเน็ตแล้วลองใหม่ครับ');
+  }).finally(function(){
+    btn.textContent='📨 ส่ง';
+    btn.disabled=false;
+  });
 }
 
 // ===== TOAST =====
@@ -770,6 +790,58 @@ function showToast(msg){
 }
 </script>
 
-<script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+<script>if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(function(reg){
+
+    // ตรวจอัปเดตเมื่อโหลดหน้า
+    reg.addEventListener('updatefound', function(){
+      var newSW = reg.installing;
+      newSW.addEventListener('statechange', function(){
+        if(newSW.state === 'installed' && navigator.serviceWorker.controller){
+          // มีเวอร์ชันใหม่พร้อมแล้ว — แสดงปุ่มอัปเดต
+          showUpdateBanner();
+        }
+      });
+    });
+
+    // ถ้ามีเน็ต ตรวจอัปเดตทุก 5 นาที
+    setInterval(function(){ reg.update(); }, 5 * 60 * 1000);
+
+  });
+
+  // รีโหลดเมื่อ SW ใหม่ activate
+  var refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(!refreshing){ refreshing = true; location.reload(); }
+  });
+}
+
+function showUpdateBanner(){
+  var b = document.getElementById('update-banner');
+  if(b) b.style.display = 'flex';
+}
+
+function doUpdate(){
+  navigator.serviceWorker.getRegistration().then(function(reg){
+    if(reg && reg.waiting){
+      reg.waiting.postMessage('SKIP_WAITING');
+    }
+  });
+  document.getElementById('update-banner').style.display = 'none';
+}</script>
+<!-- update banner -->
+<div id="update-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:#1D9E75;color:white;
+  padding:clamp(12px,3vw,16px) clamp(16px,4vw,24px);
+  align-items:center;justify-content:space-between;gap:12px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.2)">
+  <span style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:600">🆕 มีเวอร์ชันใหม่พร้อมแล้ว!</span>
+  <button onclick="doUpdate()"
+    style="background:white;color:#1D9E75;border:none;border-radius:20px;
+    padding:8px 18px;font-weight:700;font-size:clamp(.8rem,2.4vw,.92rem);cursor:pointer;white-space:nowrap">
+    อัปเดตเลย ✨
+  </button>
+</div>
+
 </body>
 </html>
