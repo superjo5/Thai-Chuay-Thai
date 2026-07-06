@@ -355,6 +355,38 @@ input[type=text]::placeholder{color:var(--muted)}
 .alert.warn{background:var(--warn-bg);color:var(--warn-text)}
 
 /* ===== MODAL ===== */
+/* slide up / bottom sheet */
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeInBg{from{opacity:0}to{opacity:1}}
+.sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:flex;align-items:flex-end;justify-content:center;
+  z-index:100;animation:fadeInBg .2s ease;
+}
+.bottom-sheet{
+  background:var(--modal-bg);
+  border-radius:20px 20px 0 0;
+  width:100%;max-width:600px;
+  max-height:80vh;
+  display:flex;flex-direction:column;
+  animation:slideUp .28s cubic-bezier(.32,1,.36,1);
+  overflow:hidden;
+}
+.sheet-handle{
+  width:40px;height:4px;background:var(--border);
+  border-radius:2px;margin:10px auto 0;flex-shrink:0;
+}
+.sheet-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px clamp(16px,4vw,22px) 12px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.sheet-body{
+  overflow-y:auto;flex:1;min-height:0;
+  padding:clamp(12px,3vw,16px) clamp(16px,4vw,22px);
+  display:flex;flex-direction:column;gap:8px;
+}
+
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.55);
   display:flex;align-items:center;justify-content:center;
@@ -445,7 +477,7 @@ input[type=text]::placeholder{color:var(--muted)}
         <div class="lbl">ราคาสินค้า</div>
         <div class="inp-row">
           <span class="baht">฿</span>
-          <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()">
+          <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()" onblur="commitHistory()" onkeydown="if(event.key==='Enter')commitHistory()">
         </div>
       </div>
     </div>
@@ -504,23 +536,24 @@ input[type=text]::placeholder{color:var(--muted)}
     </button>
     <button onclick="document.getElementById('feedback-modal').style.display='flex'"
       style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:clamp(12px,3vw,16px);background:var(--card);border:none;border-radius:clamp(12px,3vw,18px);font-size:clamp(.82rem,2.5vw,1rem);font-weight:600;color:var(--text);cursor:pointer;box-shadow:var(--shadow)">
-      💬 ส่งคำแนะนำ
+      💬 แนะนำ
     </button>
   </div>
 
-  <!-- ประวัติการคิด -->
-  <div class="card" id="history-card" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div class="lbl" style="margin:0">🕐 ประวัติการคิด</div>
-      <button onclick="clearHistory()"
-        style="background:none;border:none;color:var(--muted);font-size:clamp(.72rem,2.2vw,.85rem);cursor:pointer;padding:4px 8px;border-radius:8px">
-        ล้างทั้งหมด
-      </button>
-    </div>
-    <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
-  </div>
-
 </div>
+
+<!-- floating history button — มุมขวาบน ใต้ topbar -->
+<button id="fab-history" onclick="document.getElementById('history-modal').style.display='flex';renderHistory()"
+  style="position:fixed;top:20px;right:20px;z-index:90;
+  width:44px;height:44px;border-radius:50%;border:none;
+  background:#1D9E75;color:white;font-size:1.2rem;
+  box-shadow:0 4px 16px rgba(29,158,117,.45);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .15s"
+  onmouseover="this.style.transform='scale(1.1)'"
+  onmouseout="this.style.transform='scale(1)'">
+  ↺
+</button>
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
@@ -576,6 +609,26 @@ input[type=text]::placeholder{color:var(--muted)}
     <button class="modal-close" style="margin-top:14px" onclick="document.getElementById('install-modal').style.display='none'">ปิด</button>
   </div>
 </div>
+
+<!-- bottom sheet ประวัติ -->
+<div class="sheet-overlay" id="history-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3 style="margin:0;font-size:clamp(.95rem,3vw,1.1rem)">🕐 ประวัติการคิด</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button onclick="clearHistory()" style="background:none;border:none;color:var(--muted);font-size:clamp(.72rem,2.2vw,.85rem);cursor:pointer;padding:4px 8px;border-radius:8px">ล้างทั้งหมด</button>
+        <button onclick="document.getElementById('history-modal').style.display='none'"
+          style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)">✕</button>
+      </div>
+    </div>
+    <div class="sheet-body" id="history-list"></div>
+    <div id="history-empty" style="text-align:center;padding:40px;color:var(--muted);font-size:clamp(.85rem,2.6vw,1rem)">
+      ยังไม่มีประวัติครับ<br>ลองคำนวณดูก่อนเลย 🧮
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="feedback-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal" style="max-width:480px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -708,12 +761,22 @@ function calc(){
   else if(hasBudget&&gIdeal>b){msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';}
   else if(p*0.6>200){msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';}
   document.getElementById('alert-box').innerHTML=msg;
-  // บันทึกประวัติ
-  saveHistory(p, b, g, y);
 }
 </script>
 
 <script>
+// บันทึกเฉพาะตอน blur หรือ Enter
+function commitHistory(){
+  var p=parseNum(document.getElementById('price').value);
+  if(!p) return;
+  var bRaw=document.getElementById('budget').value.trim();
+  var b=bRaw!==''?Math.min(parseNum(bRaw),200):200;
+  var g=parseFloat(Math.min(p*0.6,200,b).toFixed(2));
+  var y=parseFloat((p-g).toFixed(2));
+  if(history_list.length && history_list[0].price===p && history_list[0].budget===b) return;
+  saveHistory(p,b,g,y);
+}
+
 // ===== HISTORY =====
 var history_list = JSON.parse(localStorage.getItem('calc_history')||'[]');
 
@@ -734,24 +797,27 @@ function saveHistory(price, budget, gov, you){
 }
 
 function renderHistory(){
-  var card = document.getElementById('history-card');
   var list = document.getElementById('history-list');
-  if(!history_list.length){ card.style.display='none'; return; }
-  card.style.display='block';
+  var empty = document.getElementById('history-empty');
+  if(!list) return;
+  if(!history_list.length){
+    list.innerHTML='';
+    if(empty) empty.style.display='block';
+    return;
+  }
+  if(empty) empty.style.display='none';
   list.innerHTML = history_list.map(function(h,i){
     return '<div onclick="loadHistory('+i+')" style="display:flex;justify-content:space-between;align-items:center;'+
       'padding:clamp(10px,2vw,14px) clamp(12px,2.5vw,16px);'+
       'background:var(--input-bg);border-radius:clamp(8px,2vw,12px);cursor:pointer;gap:8px;'+
       'border:1px solid var(--border);transition:background .15s" '+
       'onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\'var(--input-bg)\'">' +
-
       '<div style="display:flex;flex-direction:column;gap:3px;min-width:0">' +
         '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--text)">'+
           '฿ '+fmt(h.price)+(h.budget<200?' · วงเงิน '+fmt(h.budget):'') +
         '</div>' +
         '<div style="font-size:clamp(.68rem,2vw,.82rem);color:var(--muted)">'+h.date+'</div>' +
       '</div>' +
-
       '<div style="display:flex;gap:clamp(8px,2vw,14px);flex-shrink:0;align-items:center">' +
         '<div style="text-align:right">' +
           '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--gov-label);font-weight:600">รัฐออก</div>' +
@@ -762,7 +828,6 @@ function renderHistory(){
           '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--you-amt)">'+fmt(h.you)+'</div>' +
         '</div>' +
       '</div>' +
-
     '</div>';
   }).join('');
 }
@@ -772,6 +837,7 @@ function loadHistory(i){
   document.getElementById('price').value = h.price;
   if(h.budget < 200) document.getElementById('budget').value = h.budget;
   calc();
+  document.getElementById('history-modal').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -781,9 +847,6 @@ function clearHistory(){
   localStorage.removeItem('calc_history');
   renderHistory();
 }
-
-// โหลดประวัติตอนเริ่ม
-renderHistory();
 function doShare(){
   var url=location.href.split('?')[0];
   if(navigator.share){
