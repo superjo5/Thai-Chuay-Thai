@@ -467,9 +467,9 @@ input[type=text]::placeholder{color:var(--muted)}
             <div class="rc-sub green" id="gov-sub">60% ของราคา</div>
           </div>
           <div class="rc you">
-            <div class="rc-label blue">👤 คุณจ่าย</div>
+            <div class="rc-label blue">👤 คุณจ่าย (เติม)</div>
             <div class="rc-amount blue" id="you">—</div>
-            <div class="rc-sub blue" id="you-sub">40% ที่เหลือ</div>
+            <div class="rc-sub blue" id="you-sub">เติมอีก 40%</div>
           </div>
         </div>
         <div class="remain-grid" id="remain-grid" style="display:none">
@@ -487,7 +487,7 @@ input[type=text]::placeholder{color:var(--muted)}
           <div class="extra-row"><span class="extra-desc">ถ้าวงเงินรัฐพอ คุณออกแค่ =</span><span class="extra-val" id="extra-normal">—</span></div>
           <div class="extra-row"><span class="extra-desc">จ่ายจริง =</span><span class="extra-val" id="extra-actual">—</span></div>
           <div class="extra-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--warn-text)">
-            <span class="extra-desc" style="font-weight:700;opacity:1">จ่ายเกินไป</span>
+            <span class="extra-desc" style="font-weight:700;opacity:1">จ่ายเพิ่ม</span>
             <span class="extra-val" id="extra-diff">—</span>
           </div>
         </div>
@@ -670,7 +670,7 @@ function calc(){
   document.getElementById('gov').textContent=fmt(g);
   document.getElementById('you').textContent=fmt(y);
   document.getElementById('gov-sub').textContent=gp+'% ของราคา';
-  document.getElementById('you-sub').textContent=yp+'% ที่เหลือ';
+  document.getElementById('you-sub').textContent='เติมอีก '+yp+'%';
   document.getElementById('bg').style.width=gp+'%';
   document.getElementById('bb').style.width=yp+'%';
   var remGov=parseFloat((b-g).toFixed(2));
