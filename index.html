@@ -458,10 +458,19 @@ input[type=text]::placeholder{color:var(--muted)}
   <div class="main-grid">
     <div class="inputs-col">
       <div class="card">
-        <div class="lbl">วงเงินรัฐเหลือวันนี้</div>
-        <div class="inp-row">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="lbl" style="margin:0">วงเงินรัฐเหลือวันนี้</div>
+          <button onclick="document.getElementById('budget').value='';document.getElementById('price').value='';calc()"
+            style="background:none;border:none;color:var(--muted);font-size:clamp(.72rem,2.2vw,.85rem);cursor:pointer;padding:4px 8px;border-radius:8px;font-weight:600">
+            ล้างค่า ✕
+          </button>
+        </div>
+        <div class="inp-row" style="margin-top:clamp(6px,1.5vw,12px)">
           <span class="baht">฿</span>
-          <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc()">
+          <input type="text" id="budget" inputmode="decimal" placeholder="200" oninput="calc();checkBudget()">
+        </div>
+        <div id="budget-warn" style="display:none;font-size:clamp(.72rem,2.2vw,.85rem);color:var(--remain-low);margin-top:6px;font-weight:600">
+          ⚠️ วงเงินสูงสุดคือ 200 ฿ — ใช้ค่า 200 แทน
         </div>
         <div id="bbar-wrap" style="display:none">
           <div class="bbar-bg"><div class="bbar-fill" id="bbar" style="width:100%"></div></div>
@@ -544,15 +553,24 @@ input[type=text]::placeholder{color:var(--muted)}
 
 <!-- floating history button — มุมขวาล่าง -->
 <button id="fab-history" onclick="document.getElementById('history-modal').style.display='flex';renderHistory()"
-  style="position:fixed;bottom:24px;right:20px;z-index:90;
-  width:52px;height:52px;border-radius:50%;border:none;
-  background:#1D9E75;color:white;font-size:1.4rem;
+  style="position:fixed;bottom:88px;right:20px;z-index:90;
+  width:56px;height:56px;border-radius:50%;border:none;
+  background:#1D9E75;color:white;
   box-shadow:0 4px 16px rgba(29,158,117,.45);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:transform .15s,box-shadow .15s"
   onmouseover="this.style.transform='scale(1.1)'"
   onmouseout="this.style.transform='scale(1)'">
-  ↺
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+    <path d="M3 3v5h5"/>
+    <path d="M12 7v5l4 2"/>
+  </svg>
+  <span id="fab-badge" style="display:none;position:absolute;top:6px;right:6px;
+    background:#E24B4A;color:white;border-radius:10px;
+    font-size:10px;font-weight:700;min-width:16px;height:16px;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 4px;border:2px solid #1D9E75;line-height:1"></span>
 </button>
 
 <div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
@@ -562,6 +580,7 @@ input[type=text]::placeholder{color:var(--muted)}
     <div class="modal-row"><div class="modal-icon">💰</div><div class="modal-text"><div class="mt">วงเงิน</div><div class="ms">1,000 ฿/เดือน · รวมตลอดโครงการ 4,000 ฿</div></div></div>
     <div class="modal-row"><div class="modal-icon">📆</div><div class="modal-text"><div class="mt">วันโอนวงเงิน</div><div class="ms">ทุกวันที่ 1 ของเดือน</div></div></div>
     <div class="modal-row"><div class="modal-icon">⏰</div><div class="modal-text"><div class="mt">เวลาใช้สิทธิ์</div><div class="ms">06:00 – 23:00 น. ทุกวัน</div></div></div>
+    <div class="modal-row"><div class="modal-icon">⏳</div><div class="modal-text"><div class="mt">นับถอยหลัง</div><div class="ms" id="countdown">กำลังคำนวณ...</div></div></div>
     <div class="modal-row"><div class="modal-icon">⚠️</div><div class="modal-text"><div class="mt">วงเงินไม่สะสมข้ามเดือน</div><div class="ms">ใช้ไม่หมดภายในเดือน หมดสิทธิ์ทันที</div></div></div>
     <div class="modal-row"><div class="modal-icon">📱</div><div class="modal-text"><div class="mt">ช่องทางใช้สิทธิ์</div><div class="ms">แอป เป๋าตัง (G-Wallet)</div></div></div>
     <div class="modal-row"><div class="modal-icon">📞</div><div class="modal-text"><div class="mt">ติดต่อสอบถาม</div><div class="ms">0-2111-1122 (24 ชม.)</div></div></div>
@@ -610,7 +629,19 @@ input[type=text]::placeholder{color:var(--muted)}
   </div>
 </div>
 
-<!-- bottom sheet ประวัติ -->
+<!-- custom confirm modal -->
+<div class="modal-overlay" id="confirm-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:320px;text-align:center">
+    <div style="font-size:2rem;margin-bottom:10px">🗑️</div>
+    <h3 style="margin-bottom:8px">ล้างประวัติทั้งหมด?</h3>
+    <p style="font-size:clamp(.78rem,2.4vw,.92rem);color:var(--text2);margin-bottom:20px">ข้อมูลจะหายไปถาวร ไม่สามารถกู้คืนได้</p>
+    <div style="display:flex;gap:10px">
+      <button class="modal-close" style="flex:1;background:var(--input-bg);color:var(--text)"
+        onclick="document.getElementById('confirm-modal').style.display='none'">ยกเลิก</button>
+      <button class="modal-close" style="flex:1;background:#E24B4A" id="confirm-ok-btn">ลบเลย</button>
+    </div>
+  </div>
+</div>
 <div class="sheet-overlay" id="history-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="bottom-sheet">
     <div class="sheet-handle"></div>
@@ -722,10 +753,12 @@ function calc(){
     document.getElementById('gov').textContent='—';
     document.getElementById('you').textContent='—';
     document.getElementById('gov-sub').textContent='60% ของราคา';
-    document.getElementById('you-sub').textContent='40% ที่เหลือ';
+    document.getElementById('you-sub').textContent='เติมอีก 40%';
     document.getElementById('remain-grid').style.display='none';
     document.getElementById('extra-box').style.display='none';
     document.getElementById('alert-box').innerHTML='';
+    document.getElementById('you-sub').textContent='—';
+    document.getElementById('gov-sub').textContent='—';
     return;
   }
   var gIdeal=parseFloat(Math.min(p*0.6,200).toFixed(2));
@@ -761,12 +794,18 @@ function calc(){
   else if(hasBudget&&gIdeal>b){msg='<div class="alert warn">⚠️ วงเงินเหลือแค่ '+fmt(b)+' — คุณออกเพิ่มเป็น '+fmt(y)+'</div>';}
   else if(p*0.6>200){msg='<div class="alert warn">⚠️ ราคาเกิน 333.34 ฿ — รัฐช่วยสูงสุด '+fmt(g)+' คุณออก '+fmt(y)+'</div>';}
   document.getElementById('alert-box').innerHTML=msg;
+  haptic();
 }
 </script>
 
 <script>
-// บันทึกเฉพาะตอน blur หรือ Enter
-function commitHistory(){
+function checkBudget(){
+  var v=parseNum(document.getElementById('budget').value);
+  var warn=document.getElementById('budget-warn');
+  if(warn) warn.style.display=(v>200)?'block':'none';
+}
+
+// ===== HISTORY =====
   var p=parseNum(document.getElementById('price').value);
   if(!p) return;
   var bRaw=document.getElementById('budget').value.trim();
@@ -784,17 +823,39 @@ function saveHistory(price, budget, gov, you){
   var now = new Date();
   var timeStr = now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
   var dateStr = now.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
-  history_list.unshift({
-    date: dateStr+' '+timeStr,
-    price: price,
-    budget: budget,
-    gov: gov,
-    you: you
-  });
-  if(history_list.length > 20) history_list.pop(); // เก็บแค่ 20 รายการ
+  history_list.unshift({date:dateStr+' '+timeStr,price:price,budget:budget,gov:gov,you:you});
+  if(history_list.length > 20) history_list.pop();
   localStorage.setItem('calc_history', JSON.stringify(history_list));
+  updateBadge();
   renderHistory();
 }
+
+function updateBadge(){
+  var b=document.getElementById('fab-badge');
+  if(!b) return;
+  if(history_list.length>0){
+    b.style.display='flex';
+    b.textContent=history_list.length>9?'9+':history_list.length;
+  } else {
+    b.style.display='none';
+  }
+}
+
+// countdown วันหมดโครงการ 30 ก.ย. 2569
+function updateCountdown(){
+  var end=new Date('2026-09-30T23:59:59+07:00');
+  var diff=end-new Date();
+  var el=document.getElementById('countdown');
+  if(!el)return;
+  el.textContent=diff<=0?'โครงการสิ้นสุดแล้ว':'เหลืออีก '+Math.floor(diff/(864e5))+' วัน (ถึง 30 ก.ย. 2569)';
+}
+updateCountdown();
+
+// haptic feedback
+function haptic(){if(navigator.vibrate)navigator.vibrate(18);}
+
+// badge + countdown ตอนโหลด
+updateBadge();
 
 function renderHistory(){
   var list = document.getElementById('history-list');
@@ -842,10 +903,15 @@ function loadHistory(i){
 }
 
 function clearHistory(){
-  if(!confirm('ล้างประวัติทั้งหมด?')) return;
-  history_list = [];
-  localStorage.removeItem('calc_history');
-  renderHistory();
+  var modal = document.getElementById('confirm-modal');
+  modal.style.display='flex';
+  document.getElementById('confirm-ok-btn').onclick=function(){
+    history_list=[];
+    localStorage.removeItem('calc_history');
+    renderHistory();
+    modal.style.display='none';
+    showToast('ล้างประวัติแล้วครับ 🗑️');
+  };
 }
 function doShare(){
   var url=location.href.split('?')[0];
