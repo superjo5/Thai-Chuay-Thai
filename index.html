@@ -51,8 +51,6 @@ html,body{
   color:var(--text);
   transition:background .2s,color .2s;
 }
-/* ป้องกันสีเขียวแวบก่อน JS โหลด */
-
 body{
   display:flex;
   justify-content:center;
@@ -71,7 +69,7 @@ body{
 
 /* ===== TOPBAR ===== */
 .topbar{
-  background:linear-gradient(135deg,#1D9E75 0%,#0F6E56 100%);
+  background:linear-gradient(135deg,#1D9E75 0%,#17856300 100%),#1D9E75;
   border-radius:clamp(14px,3vw,22px);
   padding:clamp(14px,3vw,22px) clamp(16px,3.5vw,26px);
   color:#fff;
@@ -687,6 +685,7 @@ input[type=text]::placeholder{color:var(--muted)}
 </div>
 
 <script>
+function fitAmounts(){
   document.querySelectorAll('.rc-amount').forEach(function(el){
     el.style.fontSize='';
     var maxW=el.parentElement.clientWidth - 20;
