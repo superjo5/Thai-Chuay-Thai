@@ -52,7 +52,7 @@ html,body{
   transition:background .2s,color .2s;
 }
 /* ป้องกันสีเขียวแวบก่อน JS โหลด */
-html{background:#3AAFE0}
+
 body{
   display:flex;
   justify-content:center;
@@ -71,7 +71,7 @@ body{
 
 /* ===== TOPBAR ===== */
 .topbar{
-  background:linear-gradient(135deg,#3AAFE0 0%,#2DD4BF 100%);
+  background:linear-gradient(135deg,#1D9E75 0%,#0F6E56 100%);
   border-radius:clamp(14px,3vw,22px);
   padding:clamp(14px,3vw,22px) clamp(16px,3.5vw,26px);
   color:#fff;
@@ -79,7 +79,7 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:12px;
-  box-shadow:0 4px 20px rgba(58,175,224,.4);
+  box-shadow:0 4px 20px rgba(29,158,117,.35);
 }
 .topbar-left{
   display:flex;
@@ -205,7 +205,7 @@ input[type=text]{
   outline:none;width:100%;
   transition:background .2s,border-color .2s,color .2s;
 }
-input[type=text]:focus{border-color:#3AAFE0}
+input[type=text]:focus{border-color:#1D9E75}
 input[type=text]::placeholder{color:var(--muted)}
 
 /* progress bar */
@@ -441,17 +441,6 @@ input[type=text]::placeholder{color:var(--muted)}
 </style>
 </head>
 <body>
-<!-- splash screen -->
-<div id="splash" style="position:fixed;inset:0;z-index:999;
-  background:linear-gradient(135deg,#3AAFE0 0%,#2DD4BF 100%);
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity .3s ease">
-  <img src="icon.png" style="width:130px;height:130px;border-radius:28px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
-</div>
-<style>
-@keyframes pulse{from{opacity:.3;transform:scaleX(.8)}to{opacity:.7;transform:scaleX(1)}}
-</style>
-
 <div class="app">
   <div class="topbar">
     <div class="topbar-left">
@@ -569,7 +558,7 @@ input[type=text]::placeholder{color:var(--muted)}
   style="position:fixed;bottom:88px;right:20px;z-index:90;
   width:56px;height:56px;border-radius:50%;border:none;
   background:#1D9E75;color:white;
-  box-shadow:0 4px 16px rgba(58,175,224,.5);
+  box-shadow:0 4px 16px rgba(29,158,117,.45);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:transform .15s,box-shadow .15s"
   onmouseover="this.style.transform='scale(1.1)'"
@@ -698,13 +687,6 @@ input[type=text]::placeholder{color:var(--muted)}
 </div>
 
 <script>
-// ซ่อน splash หลัง 600ms
-window.addEventListener('load',function(){
-  setTimeout(function(){
-    var s=document.getElementById('splash');
-    if(s){s.style.opacity='0';setTimeout(function(){s.style.display='none';},300);}
-  },600);
-});
   document.querySelectorAll('.rc-amount').forEach(function(el){
     el.style.fontSize='';
     var maxW=el.parentElement.clientWidth - 20;
