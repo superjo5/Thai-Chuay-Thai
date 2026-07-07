@@ -451,7 +451,7 @@ input[type=text]::placeholder{color:var(--muted)}
         <div class="theme-icons"><span>☀️</span><span>🌙</span></div>
       </label>
       <button class="info-btn" onclick="document.getElementById('modal').style.display='flex'">ℹ️ โครงการ</button>
-      <button class="info-btn" onclick="document.getElementById('install-modal').style.display='flex'">📲 ติดตั้ง</button>
+      <button id="btn-install" class="info-btn" onclick="document.getElementById('install-modal').style.display='flex'">📲 ติดตั้ง</button>
     </div>
   </div>
 
@@ -937,14 +937,13 @@ function doShare(){
 var deferredPrompt=null;
 // ถ้าเปิดจากไอคอน (ติดตั้งแล้ว) ซ่อนปุ่มติดตั้งเลย
 var isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-if(isStandalone){
-  document.querySelectorAll('[onclick*="install-modal"]').forEach(function(el){el.style.display='none';});
+function hideInstallBtn(){
+  var btn=document.getElementById('btn-install');
+  if(btn) btn.style.display='none';
 }
-// ซ่อนปุ่มติดตั้งตอนโหลดด้วย ถ้าไม่มี prompt และเป็น standalone
-window.addEventListener('load',function(){
-  if(isStandalone){
-    document.querySelectorAll('[onclick*="install-modal"]').forEach(function(el){el.style.display='none';});
-  }
+if(isStandalone) hideInstallBtn();
+window.addEventListener('load', function(){
+  if(isStandalone) hideInstallBtn();
 });
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
