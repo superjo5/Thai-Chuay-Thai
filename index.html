@@ -486,7 +486,14 @@ input[type=text]::placeholder{color:var(--muted)}
         <div class="lbl">ราคาสินค้า</div>
         <div class="inp-row">
           <span class="baht">฿</span>
-          <input type="text" id="price" inputmode="decimal" placeholder="0.00" oninput="calc()" onblur="commitHistory()" onkeydown="if(event.key==='Enter')commitHistory()">
+          <input type="text" id="price" inputmode="decimal" placeholder="0.00"
+            oninput="this.value=this.value.replace(/,/g,'').replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1');calc()"
+            onblur="commitHistory()"
+            onkeydown="if(event.key==='Enter')commitHistory()"
+            oncontextmenu="this.value='';calc();return false"
+            ontouchstart="window._pressTimer=setTimeout(function(){document.getElementById('price').value='';calc();},600)"
+            ontouchend="clearTimeout(window._pressTimer)"
+            ontouchmove="clearTimeout(window._pressTimer)">
         </div>
       </div>
     </div>
@@ -699,7 +706,10 @@ function fitAmounts(){
   });
 }
 window.addEventListener('load',fitAmounts);
-window.addEventListener('resize',fitAmounts);
+window.addEventListener('resize',function(){
+  clearTimeout(window._fitTimer);
+  window._fitTimer=setTimeout(fitAmounts,100);
+});
 // hook into calc
 var _origCalc=calc;
 calc=function(){_origCalc();requestAnimationFrame(fitAmounts);};
@@ -809,7 +819,7 @@ function checkBudget(){
 // ===== HISTORY =====
 function commitHistory(){
   var p=parseNum(document.getElementById('price').value);
-  if(!p) return;
+  if(!p || p<=0) return; // ไม่บันทึกถ้าราคาเป็น 0 หรือว่าง
   var bRaw=document.getElementById('budget').value.trim();
   var b=bRaw!==''?Math.min(parseNum(bRaw),200):200;
   var g=parseFloat(Math.min(p*0.6,200,b).toFixed(2));
@@ -859,9 +869,16 @@ function haptic(){if(navigator.vibrate)navigator.vibrate(18);}
 // badge + countdown ตอนโหลด
 updateBadge();
 
+function smartDate(dateStr){
+  var today=new Date().toLocaleDateString('th-TH',{day:'numeric',month:'short'});
+  var parts=dateStr.split(' ');
+  if(parts[0]+' '+parts[1]===today) return 'วันนี้ '+parts[2];
+  return dateStr;
+}
+
 function renderHistory(){
-  var list = document.getElementById('history-list');
-  var empty = document.getElementById('history-empty');
+  var list=document.getElementById('history-list');
+  var empty=document.getElementById('history-empty');
   if(!list) return;
   if(!history_list.length){
     list.innerHTML='';
@@ -869,30 +886,46 @@ function renderHistory(){
     return;
   }
   if(empty) empty.style.display='none';
-  list.innerHTML = history_list.map(function(h,i){
-    return '<div onclick="loadHistory('+i+')" style="display:flex;justify-content:space-between;align-items:center;'+
-      'padding:clamp(10px,2vw,14px) clamp(12px,2.5vw,16px);'+
-      'background:var(--input-bg);border-radius:clamp(8px,2vw,12px);cursor:pointer;gap:8px;'+
-      'border:1px solid var(--border);transition:background .15s" '+
-      'onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\'var(--input-bg)\'">' +
-      '<div style="display:flex;flex-direction:column;gap:3px;min-width:0">' +
-        '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--text)">'+
-          '฿ '+fmt(h.price)+(h.budget<200?' · วงเงิน '+fmt(h.budget):'') +
-        '</div>' +
-        '<div style="font-size:clamp(.68rem,2vw,.82rem);color:var(--muted)">'+h.date+'</div>' +
-      '</div>' +
-      '<div style="display:flex;gap:clamp(8px,2vw,14px);flex-shrink:0;align-items:center">' +
-        '<div style="text-align:right">' +
-          '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--gov-label);font-weight:600">รัฐออก</div>' +
-          '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--gov-amt)">'+fmt(h.gov)+'</div>' +
-        '</div>' +
-        '<div style="text-align:right">' +
-          '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--you-label);font-weight:600">คุณเติม</div>' +
-          '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--you-amt)">'+fmt(h.you)+'</div>' +
-        '</div>' +
-      '</div>' +
+  list.innerHTML=history_list.map(function(h,i){
+    return '<div style="display:flex;align-items:center;gap:8px;'+
+      'background:var(--input-bg);border-radius:clamp(8px,2vw,12px);'+
+      'border:1px solid var(--border);overflow:hidden">'+
+      // กดเพื่อโหลด
+      '<div onclick="loadHistory('+i+')" style="flex:1;display:flex;justify-content:space-between;align-items:center;'+
+        'padding:clamp(10px,2vw,14px) clamp(12px,2.5vw,16px);cursor:pointer;gap:8px;min-width:0">'+
+        '<div style="display:flex;flex-direction:column;gap:3px;min-width:0">'+
+          '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--text)">'+
+            '฿ '+fmt(h.price)+(h.budget<200?' · วงเงิน '+fmt(h.budget):'')+
+          '</div>'+
+          '<div style="font-size:clamp(.68rem,2vw,.82rem);color:var(--muted)">'+smartDate(h.date)+'</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:clamp(8px,2vw,14px);flex-shrink:0;align-items:center">'+
+          '<div style="text-align:right">'+
+            '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--gov-label);font-weight:600">รัฐออก</div>'+
+            '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--gov-amt)">'+fmt(h.gov)+'</div>'+
+          '</div>'+
+          '<div style="text-align:right">'+
+            '<div style="font-size:clamp(.65rem,1.8vw,.78rem);color:var(--you-label);font-weight:600">คุณเติม</div>'+
+            '<div style="font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;color:var(--you-amt)">'+fmt(h.you)+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      // ปุ่มลบรายการเดียว
+      '<button onclick="deleteHistory('+i+')" style="background:none;border:none;border-left:1px solid var(--border);'+
+        'color:var(--muted);padding:0 14px;height:100%;cursor:pointer;font-size:1rem;align-self:stretch;'+
+        'display:flex;align-items:center;transition:background .15s;min-height:56px"'+
+        ' onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\'none\'">'+
+        '🗑️'+
+      '</button>'+
     '</div>';
   }).join('');
+}
+
+function deleteHistory(i){
+  history_list.splice(i,1);
+  localStorage.setItem('calc_history',JSON.stringify(history_list));
+  updateBadge();
+  renderHistory();
 }
 
 function loadHistory(i){
